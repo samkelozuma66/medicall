@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="zxx">
+<head>
+    <title>Admin Profile</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    	 <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <!-- themefy CSS -->
+    <link rel="stylesheet" href="vendors/themefy_icon/themify-icons.css" />
+    <!-- swiper slider CSS -->
+    <link rel="stylesheet" href="vendors/swiper_slider/css/swiper.min.css" />
+    <!-- select2 CSS -->
+    <link rel="stylesheet" href="vendors/select2/css/select2.min.css" />
+    <!-- select2 CSS -->
+    <link rel="stylesheet" href="vendors/niceselect/css/nice-select.css" />
+    <!-- owl carousel CSS -->
+    <link rel="stylesheet" href="vendors/owl_carousel/css/owl.carousel.css" />
+    <!-- gijgo css -->
+    <link rel="stylesheet" href="vendors/gijgo/gijgo.min.css" />
+    <!-- font awesome CSS -->
+    <link rel="stylesheet" href="vendors/font_awesome/css/all.min.css" />
+    <link rel="stylesheet" href="vendors/tagsinput/tagsinput.css" />
+    <!-- datatable CSS -->
+    <link rel="stylesheet" href="vendors/datatable/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="vendors/datatable/css/responsive.dataTables.min.css" />
+    <link rel="stylesheet" href="vendors/datatable/css/buttons.dataTables.min.css" />
+    <!-- text editor css -->
+    <link rel="stylesheet" href="vendors/text_editor/summernote-bs4.css" />
+    <!-- morris css -->
+    <link rel="stylesheet" href="vendors/morris/morris.css">
+    <!-- metarial icon css -->
+    <link rel="stylesheet" href="vendors/material_icon/material-icons.css" />
+
+    <!-- menu css  -->
+    <link rel="stylesheet" href="css/metisMenu.css">
+    <!-- style CSS -->
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/colors/default.css" id="colorSkinCSS">
+    
+    
+ <style type="text/css">
+     
+
+   .registration-form{
+      background: #f7f7f7;
+      padding: 20px;
+     
+      margin: 100px 0px;
+    }
+    .err-msg{
+      color:red;
+    }
+    .registration-form form{
+      border: 1px solid #e8e8e8;
+      padding: 10px;
+      background: #f3f3f3;
+    }
+    
+    
+    .dropbtn {
+  background-color: grey;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #ddd;}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {display: block;}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {background-color: #3e8e41;}
+  </style>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script>
+   // var InputType = "";
+    
+    
+    
+    function trimChar(string, charToRemove) 
+      {
+            while(string.charAt(0)==charToRemove) {
+                string = string.substring(1);
+            }
+        
+            while(string.charAt(string.length-1)==charToRemove) {
+                string = string.substring(0,string.length-1);
+            }
+        
+            return string;
+        }
+  /*  function determimeUserID(InputType)
+    { 
+        //var Police= "Police", Doctor="Doc", Ambulance="Ambulance";
+        int userID = 0;
+        if(InputType ="Police"){
+            userID = 1;
+        }
+        if(InputType = "Doctor"){
+            userID = 2;
+        }
+        if(InputType = "Ambulance"){
+            UserID = 3;
+        }
+        
+    }*/
+      function addRow()
+    { 
+    }
+     function changeStatus()
+        {
+            
+            
+            if (document.getElementById("flexSwitchCheckDefault").checked)
+            {
+                updateStatus = "Unblocked";
+            }
+            else
+            {
+                updateStatus = "Blocked";
+            }
+            alert(updateStatus);
+        }
+     function updateDetails()
+        {
+            var AdminId              = document.getElementById("AdminId").value             ;
+            var InstitutionName            = document.getElementById("InstitutionName").value           ;
+    	    var InstitutionEmail         = document.getElementById("InstitutionEmail").value        ;
+    	    var AdminMobile        = document.getElementById("AdminMobile").value       ;
+    	    var Address         = document.getElementById("Address").value        ;
+    	    var AddressLat         = document.getElementById("AddressLat").value        ;
+    	     var AddressLong         = document.getElementById("AddressLong").value        ;
+    	      var Status         = document.getElementById("Status").value        ;
+    	    var AdminPassword  = document.getElementById("AdminPassword").value ;
+    	   var UserID  = document.getElementById("UserID").value ;
+
+    	    
+    	    
+    	    
+    	    $.post(                             //call the server
+                "/updateAdminDetails.php",                     //At this url
+                {
+                    AdminId: AdminId,
+                    InstitutionName: InstitutionName,
+                    InstitutionEmail: InstitutionEmail,
+                    AdminMobile: AdminMobile,
+                    Address: Address,
+                    AddressLat:AddressLat,
+                    AddressLong :AddressLong,
+                    Status:Status,
+                    AdminPassword: AdminPassword,
+                    UserID : UserID,
+                   
+                }                               //And send this data to it
+            ).done(                             //And when it's done
+                function(data)
+                {
+                    $('#fromAjax').html(data);  //Update here with the response
+                    location.reload();
+                }
+            );
+    	    
+        }
+        //function getUSerDetails()       {
+          //  var url_string = window.location.href;
+          //  var url = new URL(url_string);
+          //  var username = url.searchParams.get("username");
+            //document.getElementById("usernamHolder").innerHTML = username;
+            
+            //$.post(                             //call the server
+               // "/getUserDetails.php",                     //At this url
+               // {
+               //     username: username
+               // }                               //And send this data to it
+           // ).done(                             //And when it's done
+               // function(data)
+                //{
+                   // var str = trimChar(data,'[');
+                   // str = trimChar(str,']');
+                   // var myObj = JSON.parse(str);
+                    
+                   // document.getElementById("userid").value                  =    myObj.user_id              ;
+                   // document.getElementById("userName").value                =    myObj.name                 ;
+            	   // document.getElementById("userSurname").value             =    myObj.surname              ;
+            	   // document.getElementById("userIdNumber").value            =    myObj.id_number            ;
+            	   // document.getElementById("userAddress").value             =    myObj.Address              ;
+            	   // document.getElementById("userMedicalAidName").value      =    myObj.Medical_Aid_Name     ;
+            	   // document.getElementById("MedicalAidNumber").value        =    myObj.Medical_Aid_Number   ;
+            	    //document.getElementById("MedicalAidConatct").value       =    myObj.Medical_Aid_Conatct  ;
+                    //$('#fromAjax').html(data);  //Update here with the response
+                //}
+            //);
+       // }
+     
+    function admin()
+      {
+          //document.getElementById("hostingDive").innerHTML = "<a href='#'> Hello Wolrd </a>";
+          //setInterval(function(){ location.reload(); }, 120000);
+          $.post(                             //call the server
+                "/getAdminDetails.php",                     //At this url
+                {
+                    username: "username",
+                    policeid: "1"
+                }                               //And send this data to it
+            ).done(                             //And when it's done
+                function(data)
+                {
+                    var str = trimChar(data,'[');
+                    str = trimChar(str,']');
+                    var myObj = str.split("},{");
+                    //alert(myObj[0] + "}");
+                    messageData = "<table class='table'><thead><tr><th>New User Id</th><th>InstitutionName</th><th>InstitutionEmail</th><th>Mobile Number</th><th>Address</th><th>AddressLat</th><th>AddressLong</th><th>Status</th><th>Password</th>><th>ID</th></tr></thead><tbody>";
+                    
+                    /*<tr><th>Date</th><th>Time</th><th>Patient name</th><th>Patient surname</th><th>Patient number</th><th>Patient address</th><th>Medical Aid Name</th><th>Medical Aid Number</th><th>Appointment status </th></tr>*/
+                    
+                    myObj.forEach(function(item) 
+                        {
+                            //my = JSON.parse(item);
+                            if (item.indexOf('}') == -1)
+                            {
+                                item = item + "}";
+                            }
+                            if(item.indexOf('{')) 
+                            {
+                                item = "{" + item  ;
+                            }
+                            alert(item);
+                            my = JSON.parse(item);
+                            
+                            /*<tr class='info'><td>" + my.user_id_from + "</td><td>" + my.message + "</td></tr>  */
+                            messageData = messageData + "<tr class='info'><td>" + my.AdminId  + "</td><td>" + my.InstitutionName  + "</td><td>" + my.InstitutionEmail  + "</td><td>" + my.AdminMobile  + "</td><td>" + my.Address  + "</td><td>" + my.AddressLat  + "</td><td>" + my.AddressLong  + "</td><td>" + my.Status  + "</td><td>" +  my.AdminPassword + "</td><td>" +  my.UserID + "</td></tr>  ";
+                            
+                           
+                        }
+                    );
+                    messageData = messageData + "</tbody></table>";
+                    
+                    document.getElementById("hostingDive").innerHTML = messageData;
+                    /*document.getElementById("userid").value                  =    myObj.user_id              ;
+                    document.getElementById("name").value                    =    myObj.name                 ;
+            	    document.getElementById("userSurname").value             =    myObj.surname              ;
+            	    document.getElementById("userIdNumber").value            =    myObj.id_number            ;
+            	    document.getElementById("userAddress").value             =    myObj.Address              ;
+            	    document.getElementById("userMedicalAidName").value      =    myObj.Medical_Aid_Name     ;
+            	    document.getElementById("MedicalAidNumber").value        =    myObj.Medical_Aid_Number   ;
+            	    document.getElementById("MedicalAidConatct").value       =    myObj.Medical_Aid_Conatct  ;*/
+                    $('#fromAjax').html(data);  //Update here with the response
+                }
+            );
+      }
+       function trimChar(string, charToRemove) 
+      {
+            while(string.charAt(0)==charToRemove) {
+                string = string.substring(1);
+            }
+        
+            while(string.charAt(string.length-1)==charToRemove) {
+                string = string.substring(0,string.length-1);
+            }
+        
+            return string;
+        }
+    /*function addRow()
+    { 
+    }*/
+    function goToupdate()
+        {
+            var url_string = window.location.href;
+            var url = new URL(url_string);
+            var userId = url.searchParams.get("username");
+            var parm = "username="+userId;
+            window.location.href = "/updateAdmindeatils.html?"+parm;
+        }
+    
+    function test()//successMedic???
+        {
+            navigator.geolocation.getCurrentPosition(successPolice); 
+            
+        }
+</script>
+</head>
+<body onload = "admin()" class="crm_body_bg">
+<nav class="sidebar">
+    <div class="logo d-flex justify-content-between">
+        <a href="index.html"><img src="img/medicall.jpg" alt=""></a>
+        <div class="sidebar_close_icon d-lg-none">
+            <i class="ti-close"></i>
+        </div>
+    </div>
+    
+      <ul id="sidebar_menu">
+       <!-- <li class="side_menu_title">
+            <span>Menu</span>
+          </li>-->
+        <li class="mm-active">
+          <a class="has-arrow"  href="#"  aria-expanded="false">
+          <!-- <i class="fas fa-th"></i> -->
+          <img src="img/menu-icon/1.svg" alt="">
+            <span>Menu</span>
+          </a>
+          <ul>
+            <li><a class="active" href="#" onclick="goToIndex()">Dashboard</a></li>
+            <li><a href="#">Medical Booking</a></li>
+          </ul>
+
+        </li>
+        
+    </ul>
+    
+    </nav>
+    <section class="main_content dashboard_part">
+    <br>
+          <!-- menu  -->
+    <div class="container-fluid no-gutters">
+        <div class="row">
+            <div class="col-lg-12 p-0">
+                <div class="header_iner d-flex justify-content-between align-items-center">
+                    <div class="sidebar_icon d-lg-none">
+                        <i class="ti-menu"></i>
+                    </div>
+                    <div class="serach_field-area">
+                            <div class="search_inner">
+                                <form action="#">
+                                    <div class="search_field">
+                                        <input type="text" placeholder="Search here..." >
+                                    </div>
+                                    <button type="submit"> <img src="img/icon/icon_search.svg" alt=""> </button>
+                                </form>
+                            </div>
+                        </div>
+                    <div class="header_right d-flex justify-content-between align-items-center">
+                        <div class="header_notification_warp d-flex align-items-center">
+                            <li>
+                                <a href="#"> <img src="img/icon/bell.svg" alt=""> </a>
+                            </li>
+                            <li>
+                                <a href="#"> <img src="img/icon/msg.svg" alt=""> </a>
+                            </li>
+                        </div>
+                        <div class="profile_info">
+                            <img src="img/logo.jpg" alt="#">
+                            <div class="profile_info_iner">
+                                <p>User </p>
+                                <h5 id="usernamHolder"></h5>
+                                <div class="profile_info_details">
+                                    <a href="#">My Profile <i class="ti-user"></i></a>
+                                    <a href="#">Settings <i class="ti-settings"></i></a>
+                                    <a href="/login.html">Log Out <i class="ti-shift-left"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--/ menu  -->
+    
+    
+    
+      <div class="main_content_iner ">
+        <div class="container-fluid p-0">
+            <div class="row justify-content-center">
+                <div class="col-lg-12">
+                    <div class="white_box mb_60">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-6">
+                                <!-- sign_in  -->
+                                <div class="modal-content cs_modal">
+                                    <div class="modal-header" >
+                                        <h5 class="modal-title" >Admin</h5>
+                                    </div>
+                                    <div class="modal-body">
+
+<div class="modal-content cs_modal">
+                                    <div class="modal-header" >
+                                        <h5 class="modal-title" >Add New User</h5>
+                                    </div>
+		
+	<form action="AdminProfile.php" method="post">
+
+            <input type="text" name="InstitutionName" class="form-control" required id="InstitutionName" placeholder="InstitutionName"><br><br>
+
+            <input type="text" name="InstitutionEmail" class="form-control" required id="InstitutionEmail" placeholder="Email"><br><br>
+
+            <input type="text" name="AdminMobile" class="form-control"  id="AdminMobile" placeholder="Mobile"><br><br>
+            
+             <input type="text" name="Address" class="form-control"  id="Address" placeholder="Address"><br><br>
+             
+              
+             <input type="text" name="AddressLat" class="form-control"  id="AddressLat" placeholder="AddressLat"><br><br>
+             
+               <input type="text" name="AddressLong" class="form-control"  id="AddressLong" placeholder="AddressLong"><br><br>
+               
+                 <input type="text" name="Status" class="form-control"  id="Status" placeholder="Status"><br><br>
+             
+              <input type="text" name="AdminPassword" class="form-control"  id="AdminPassword" placeholder="Password"><br><br>
+              
+              <input type="text" name="AdminPassword" class="form-control"  id="AdminPassword"  placeholder="Confirm Password">
+              <input type="text" name="UserID" class="form-control"  id="UserID"  placeholder="enter (Police = 1, Doctor=2 or Ambulance=3)">
+              
+             <!-- 
+              <div class="dropdown">
+                  <button class="dropbtn">usertype</button>
+                    <div class="dropdown-content">
+                    <a id="save" href="" onclick="determineUserID()"> Police</a>
+                    <a href="#" onclick="determineUserID("Doctor")">Doctor</a>
+                    <a href="#" onclick="determineUserID("Ambulance")">Ambulance </a>
+                    </div>
+              </div>
+            -->
+                <input type="submit" name="insert"  value="Create User">
+             <br><br>
+
+        </form>
+
+                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+             </div>
+        </div>
+    </div>
+    
+    
+     <div class="main_content_iner ">
+        <div class="container-fluid p-0">
+            <div class="row justify-content-center">
+                <div class="col-lg-12">
+                    <div class="white_box mb_30">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-6">
+                                <!-- sign_in  -->
+     <div class="modal-content cs_modal">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Update Details</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                         	<form action="UpdateAdminDetails.php" method="post">
+                                            <div class="form-group">
+                                                <input  type="text" name="AdminId" class="form-control" placeholder="AdminId" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <input name="InstitutionName" type="text" class="form-control" placeholder="InstitutionName" required value="">
+                                            </div>
+                                            <div class="form-group">
+                                                <input name="InstitutionEmail" type="text" class="form-control" placeholder="Email" required value="">
+                                            </div>
+                                            <div class="form-group">
+                                                <input name="AdminMobile" type="text" class="form-control" placeholder="Contact Number&#x260F;" required value=""> 
+                                            </div>
+                                               <div class="form-group">
+                                                <input name="Address" type="text" class="form-control" placeholder="Address" required value="">
+                                            </div>
+                                            
+                                             <div class="form-group">
+                                                <input name="AddressLat" type="text" class="form-control" placeholder="AddressLat" required value="">
+                                            </div>
+                                            
+                                             <div class="form-group">
+                                                <input name="AddressLong" type="text" class="form-control" placeholder="AddressLong" required value="">
+                                            </div>
+                                            
+                                             <div class="form-group">
+                                                <input name="Status" type="text" class="form-control" placeholder="Status" required value="">
+                                            </div>
+                                            
+                                            <div class="form-group">
+                                                <input name="AdminPassword" type="text" class="form-control" placeholder="Password" required value="">
+                                            </div>
+                                           
+                                            
+                                           <input type="submit" name="update"  value="Update">
+             <br><br>
+                                            
+                                        
+                                        </form>
+    </div>
+    </div>
+     </div>
+    </div>
+     </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    
+    
+     <div class="main_content_iner ">
+        <div class="container-fluid p-0">
+            <div class="row justify-content-center">
+                <div class="col-lg-12">
+                    <div class="white_box mb_30">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-6">
+                                <!-- sign_in  -->
+    
+            <div class="modal-content cs_modal">
+                                    <div class="modal-header" >
+                                        <h5 class="modal-title">Admin User Info</h5>
+                                    </div>
+                                    </div>
+                                    
+    <h5 id="hostingDive">
+        
+    </h5>
+    
+    
+    
+    <!--  <form action="SearchUser.php" method="post">
+    <p>
+        <label for="InstitutionName">Enter The Name of User You Want to Search:</label>
+        <input type="text" name="InstitutionName" >
+        
+    </p>
+  <input type="submit" name="search" value="Search">
+  
+</form>
+<br>
+     <form action="deleteAdminUser.php" method="post">
+    <p>
+        <label for="AdminId">Enter The New User Id No. You Want to Delete:</label>
+        <input type="text" name="AdminId" >
+        
+    </p>
+  <input type="submit" name="delete" value="Clear Data">
+  
+</form>-->
+          </div>
+    </div>
+     </div>
+    </div>
+     </div>
+    </div>
+    </div>
+    </div>
+    
+   
+   
+<br>
+ <!--<div class="main_content_iner ">
+        <div class="container-fluid p-0">
+            <div class="row justify-content-center">
+                <div class="col-lg-12">
+                    <div class="white_box mb_30">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-6">
+                                <!-- sign_in  
+    
+ <div class="form-check form-switch">
+                                    
+                                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" onclick="changeStatus()">
+  
+                                    <label class="form-check-label" for="flexSwitchCheckCheckedDisabled">Status</label>
+                                </div>
+                                </div>
+                                </div>
+                                </div>
+                                </div>
+                                </div>
+                                </div>
+                                </div>-->
+                            
+                                
+<!-- footer part -->
+<div class="footer_part">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="footer_iner text-center">
+                    <p>2020 © Influence - Designed by <a href="#"> <i class="ti-heart"></i> </a><a href="#"> Samkelo Zuma</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <!--<p style="text-align:left;">
+        <button type="button">Add Booking</button>
+
+    </p>
+    -->
+ 
+<!--<form action="addMedicalBooking.php" method="post">
+    <p>
+        <label for="patient_name">Patient's Name(s):</label>
+        <input type="text" name="patient_name" id="patient_name">
+    </p>
+    <p>
+        <label for="patient_surname">Patient's Surname:</label>
+        <input type="text" name="patient_surname" id="patient_surname">
+    </p>
+    <p>
+        <label for="patient_number">Patient's Cell Number:</label>
+        <input type="text" name="patient_number" id="patient_number">
+    </p>
+    <p>
+        <label for="patient_address">Patient's Address:</label>
+        <input type="text" name="patient_address" id="patient_address">
+    </p>
+    <p>
+        <label for="booking_status">Appointment Status:</label>
+        <input type="text" name="booking_status" id="booking_status">
+    </p>
+    <p>
+        <label for="MedicalAid_name">Medical Aid Name:</label>
+        <input type="text" name="MedicalAid_name" id="MedicalAid_name">
+    </p>
+    <p>
+        <label for="MedicalAid_number">Medical Aid number:</label>
+        <input type="text" name="MedicalAid_number" id="MedicalAid_number">
+    </p>
+    <p>
+        <label for="_date">Date:</label>
+        <input type="date" name="_date" id="_date">
+    </p>
+    <p>
+        <label for="_time">Time:</label>
+        <input type="time" name="_time" id="_time">
+    </p>
+    <!--
+    <p>
+        <label for="booking_number">Booking Number:</label>
+        <input type="number" name="booking_name" id="booking_number" min="1" max="5">
+    </p>
+    <input type="submit" value="Add Appointment">
+</form>-->
+<!--<form action="deleteMedicalBooking.php" method="get">
+    <label for="booking_number">Delete Appointment number?:</label>
+    <input type="number" >
+    <input type="submit" value="DELETE Appointment">
+    
+</form>-->
+</section>
+
+ <script src="js/jquery-3.4.1.min.js"></script>
+<!-- popper js -->
+<script src="js/popper.min.js"></script>
+<!-- bootstarp js -->
+<script src="js/bootstrap.min.js"></script>
+<!-- sidebar menu  -->
+<script src="js/metisMenu.js"></script>
+<!-- waypoints js -->
+<script src="vendors/count_up/jquery.waypoints.min.js"></script>
+<!-- waypoints js -->
+<script src="vendors/chartlist/Chart.min.js"></script>
+<!-- counterup js -->
+<script src="vendors/count_up/jquery.counterup.min.js"></script>
+<!-- swiper slider js -->
+<script src="vendors/swiper_slider/js/swiper.min.js"></script>
+<!-- nice select -->
+<script src="vendors/niceselect/js/jquery.nice-select.min.js"></script>
+<!-- owl carousel -->
+<script src="vendors/owl_carousel/js/owl.carousel.min.js"></script>
+<!-- gijgo css -->
+<script src="vendors/gijgo/gijgo.min.js"></script>
+<!-- responsive table -->
+<script src="vendors/datatable/js/jquery.dataTables.min.js"></script>
+<script src="vendors/datatable/js/dataTables.responsive.min.js"></script>
+<script src="vendors/datatable/js/dataTables.buttons.min.js"></script>
+<script src="vendors/datatable/js/buttons.flash.min.js"></script>
+<script src="vendors/datatable/js/jszip.min.js"></script>
+<script src="vendors/datatable/js/pdfmake.min.js"></script>
+<script src="vendors/datatable/js/vfs_fonts.js"></script>
+<script src="vendors/datatable/js/buttons.html5.min.js"></script>
+<script src="vendors/datatable/js/buttons.print.min.js"></script>
+
+<script src="js/chart.min.js"></script>
+<!-- progressbar js -->
+<script src="vendors/progressbar/jquery.barfiller.js"></script>
+<!-- tag input -->
+<script src="vendors/tagsinput/tagsinput.js"></script>
+<!-- text editor js -->
+<script src="vendors/text_editor/summernote-bs4.js"></script>
+
+<script src="vendors/apex_chart/apexcharts.js"></script>
+
+<!-- custom js -->
+<script src="js/custom.js"></script>
+ <!--</section>-->
+</body>

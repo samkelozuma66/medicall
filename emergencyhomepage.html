@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+
+<!-- Mirrored from demo.dashboardpack.com/hospital-html/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 20 Apr 2021 10:54:20 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>MEDI CALL</title>
+
+    <link rel="icon" href="img/favicon.jpg" type="image/png"> 
+    <!-- <link rel="icon" href="img/favicon.png" type="image/png"> -->
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <!-- themefy CSS -->
+    <link rel="stylesheet" href="vendors/themefy_icon/themify-icons.css" />
+    <!-- swiper slider CSS -->
+    <link rel="stylesheet" href="vendors/swiper_slider/css/swiper.min.css" />
+    <!-- select2 CSS -->
+    <link rel="stylesheet" href="vendors/select2/css/select2.min.css" />
+    <!-- select2 CSS -->
+    <link rel="stylesheet" href="vendors/niceselect/css/nice-select.css" />
+    <!-- owl carousel CSS -->
+    <link rel="stylesheet" href="vendors/owl_carousel/css/owl.carousel.css" />
+    <!-- gijgo css -->
+    <link rel="stylesheet" href="vendors/gijgo/gijgo.min.css" />
+    <!-- font awesome CSS -->
+    <link rel="stylesheet" href="vendors/font_awesome/css/all.min.css" />
+    <link rel="stylesheet" href="vendors/tagsinput/tagsinput.css" />
+    <!-- datatable CSS -->
+    <link rel="stylesheet" href="vendors/datatable/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="vendors/datatable/css/responsive.dataTables.min.css" />
+    <link rel="stylesheet" href="vendors/datatable/css/buttons.dataTables.min.css" />
+    <!-- text editor css -->
+    <link rel="stylesheet" href="vendors/text_editor/summernote-bs4.css" />
+    <!-- morris css -->
+    <link rel="stylesheet" href="vendors/morris/morris.css">
+    <!-- metarial icon css -->
+    <link rel="stylesheet" href="vendors/material_icon/material-icons.css" />
+
+    <!-- menu css  -->
+    <link rel="stylesheet" href="css/metisMenu.css">
+    <!-- style CSS -->
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/colors/default.css" id="colorSkinCSS">
+    
+    <link href="dist/attention.css" rel="stylesheet">
+    
+    <!-- Boostrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        var crd ;
+        var tes = '';
+        var long = '' ; 
+        function trimChar(string, charToRemove) 
+        {
+            while(string.charAt(0)==charToRemove) {
+                string = string.substring(1);
+            }
+        
+            while(string.charAt(string.length-1)==charToRemove) {
+                string = string.substring(0,string.length-1);
+            }
+        
+            return string;
+        }
+        function getUSerDetails()       
+        {
+            var url_string = window.location.href;
+            var url = new URL(url_string);
+            var username = url.searchParams.get("username");
+            document.getElementById("usernamHolder").innerHTML = username;
+            
+            $.post(                             //call the server
+                "/getUserDetails.php",                     //At this url
+                {
+                    username: username
+                }                               //And send this data to it
+            ).done(                             //And when it's done
+                function(data)
+                {
+                    var str = trimChar(data,'[');
+                    str = trimChar(str,']');
+                    var myObj = JSON.parse(str);
+                    
+                    document.getElementById("userid").value                  =    myObj.user_id              ;
+                    document.getElementById("name").value                    =    myObj.name                 ;
+            	    document.getElementById("userSurname").value             =    myObj.surname              ;
+            	    document.getElementById("userIdNumber").value            =    myObj.id_number            ;
+            	    document.getElementById("userAddress").value             =    myObj.Address              ;
+            	    document.getElementById("userMedicalAidName").value      =    myObj.Medical_Aid_Name     ;
+            	    document.getElementById("MedicalAidNumber").value        =    myObj.Medical_Aid_Number   ;
+            	    document.getElementById("MedicalAidConatct").value       =    myObj.Medical_Aid_Conatct  ;
+                    $('#fromAjax').html(data);  //Update here with the response
+                }
+            );
+        }
+        function goToupdate()
+        {
+            var url_string = window.location.href;
+            var url = new URL(url_string);
+            var userId = url.searchParams.get("username");
+            var parm = "username="+userId;
+            window.location.href = "/updateUserdeatils.html?"+parm;
+        }
+        function test()
+        {
+            navigator.geolocation.getCurrentPosition(successPolice); 
+            
+        }
+        function playAudio()
+        {
+            var x = document.getElementById("myAudio"); 
+            //x.play();
+        }
+        function pauseAudio()
+        {
+            var x = document.getElementById("myAudio"); 
+            x.pause();
+        }
+        function goToIndex()
+        {
+            var url_string = window.location.href;
+            var url = new URL(url_string);
+            var username = url.searchParams.get("username");
+            var usertype = url.searchParams.get("usertype");
+            var parm = "username=" + username + "&usertype=" + usertype;
+            window.location.href = "/emergencyhomepage.html?"+parm;
+        }
+        function getEmergencyDetails()
+        {
+            var url_string = window.location.href;
+            var url = new URL(url_string);
+            var username = url.searchParams.get("username");
+            var usertype = url.searchParams.get("usertype");
+            mySoung = document.getElementById("myAudio"); 
+            //mySoung.muted = false;
+            play_Sound = document.getElementById("play_Sound"); 
+            //alert(mySoung.play());
+            //play_Sound.click();
+            $.post(                             //call the server
+                "/getEmegerncyDetails.php",                     //At this url
+                {
+                    username: username,
+                    usertype: usertype
+                }                               //And send this data to it
+            ).done(                             //And when it's done
+                function(data)
+                {
+                    var str = trimChar(data,'[');
+                    str = trimChar(str,']');
+                    var myObj = JSON.parse(str);
+                    
+                    
+                    document.getElementById("userid").value            =    myObj.user_id              ;
+                    document.getElementById("police_id").value         =    myObj.police_id            ;
+            	    document.getElementById("police_name").value       =    myObj.police_name          ;
+            	    document.getElementById("police_address").value    =    myObj.police_address       ;
+            	    document.getElementById("address_lat").value       =    myObj.address_lat          ;
+            	    document.getElementById("address_long").value      =    myObj.address_long         ;
+            	    document.getElementById("police_status").value      =    myObj.police_status        ;
+            	    document.getElementById("userFullname").innerHTML  =    myObj.police_name  ;
+            	    document.getElementById("userPhonenumber").innerHTML  =    myObj.User_Cellnumber  ;
+            	    //checked
+            	    
+            	    if (myObj.police_status == "emergency_online")
+            	    {
+            	        document.getElementById("flexSwitchCheckDefault").checked = true;
+            	    }
+            	    
+                    $('#fromAjax').html(data);  //Update here with the response
+                }
+            ).then(                             //And when it's done
+                function(data)
+                {
+                    
+                    var url_string = window.location.href;
+                    var url = new URL(url_string);
+                    var username = url.searchParams.get("username");
+                    var usertype = url.searchParams.get("usertype");
+                    document.getElementById("usernamHolder").innerHTML = username;
+                     
+                   policeid = document.getElementById("userid").value;
+                   $.post(                             //call the server
+                        "/getMessages.php",                     //At this url
+                        {
+                            username: username,
+                            policeid: policeid
+                        }                               //And send this data to it
+                    ).done(                             //And when it's done
+                        function(data)
+                        {
+                            var str = trimChar(data,'[');
+                            str = trimChar(str,']');
+                            var myObj = str.split("},{");
+                            notify = "none";
+                            //alert(myObj[0] + "}");
+                            messageData = "<table class='table'><thead><tr><th>Alert</th><th></th><th>Video</th></tr></thead><tbody>";
+                            myObj.forEach(function(item) 
+                                {
+                                    //my = JSON.parse(item);
+                                    if (item.indexOf('}') == -1)
+                                    {
+                                        item = item + "}";
+                                    }
+                                    if(item.indexOf('{')) 
+                                    {
+                                        item = "{" + item  ;
+                                    }
+                                    my = JSON.parse(item);
+                                    if(my.message_status == "message_new")
+                                    {
+                                        newClass = "info";
+                                        notify = "info";
+                                        //mySoung.play();
+                                        
+                                    }
+                                    else
+                                    {
+                                        newClass = ""
+                                    }
+                                    //alert(my.message_status) msg_id
+                                    messageData = messageData + "<tr class='" + newClass +"'><td style='display:none;'>" + my.msg_id + "</t><td style='display:none;'>" + my.user_id_from + "</td><td>" + my.message + "</td><td><a href='#' onclick='openMessage(this)' ><span class='glyphicon glyphicon-envelope'></span></a></td><td><a href='/uploads/" + my.multimedia_string+ "' target='_blank'>Video</a></td></tr>  ";
+                                    
+                                   
+                                }
+                            );
+                            if(notify == "info")
+                            {
+                                alert(notify);
+                                mySoung = document.getElementById("myAudio"); 
+                                mySoung.muted = false;
+                                mySoung.play();
+                            }
+                            else
+                            {
+                                mySoung = document.getElementById("myAudio"); 
+                                mySoung.muted = false;
+                                mySoung.pause();
+                            }
+                            messageData = messageData + "</tbody></table>";
+                            
+                            document.getElementById("hostingDive").innerHTML = messageData;
+                            /*document.getElementById("userid").value                  =    myObj.user_id              ;
+                            document.getElementById("name").value                    =    myObj.name                 ;
+                    	    document.getElementById("userSurname").value             =    myObj.surname              ;
+                    	    document.getElementById("userIdNumber").value            =    myObj.id_number            ;
+                    	    document.getElementById("userAddress").value             =    myObj.Address              ;
+                    	    document.getElementById("userMedicalAidName").value      =    myObj.Medical_Aid_Name     ;
+                    	    document.getElementById("MedicalAidNumber").value        =    myObj.Medical_Aid_Number   ;
+                    	    document.getElementById("MedicalAidConatct").value       =    myObj.Medical_Aid_Conatct  ;*/
+                            $('#fromAjax').html(data);  //Update here with the response
+                        }
+                    );
+                  refreshIntervalId = setInterval(function ()
+                  {
+                      
+                      $.post(                             //call the server
+                        "/getMessages.php",                     //At this url
+                        {
+                            username: username,
+                            policeid: policeid
+                        }                               //And send this data to it
+                    ).done(                             //And when it's done
+                        function(data)
+                        {
+                            var str = trimChar(data,'[');
+                            str = trimChar(str,']');
+                            var myObj = str.split("},{");
+                            notify = "none";
+                            //alert(myObj[0] + "}");
+                            messageData = "<table class='table'><thead><tr><th>Alert</th><th></th><th>Video</th></tr></thead><tbody>";
+                            myObj.forEach(function(item) 
+                                {
+                                    //my = JSON.parse(item);
+                                    if (item.indexOf('}') == -1)
+                                    {
+                                        item = item + "}";
+                                    }
+                                    if(item.indexOf('{')) 
+                                    {
+                                        item = "{" + item  ;
+                                    }
+                                    my = JSON.parse(item);
+                                    if(my.message_status == "message_new")
+                                    {
+                                        newClass = "info";
+                                        notify = "info";
+                                        //mySoung.play();
+                                        
+                                    }
+                                    else
+                                    {
+                                        newClass = ""
+                                    }
+                                    //alert(my.message_status) msg_id
+                                    messageData = messageData + "<tr class='" + newClass +"'><td style='display:none;'>" + my.msg_id + "</t><td style='display:none;'>" + my.user_id_from + "</td><td>" + my.message + "</td><td><a href='#' onclick='openMessage(this)' ><span class='glyphicon glyphicon-envelope'></span></a></td><td><a href='/uploads/" + my.multimedia_string+ "' target='_blank'>Video</a></td></tr>  ";
+                                    
+                                   
+                                }
+                            );
+                            if(notify == "info")
+                            {
+                                //alert(notify);
+                                mySoung = document.getElementById("myAudio"); 
+                                mySoung.muted = false;
+                                mySoung.play();
+                            }
+                            else
+                            {
+                                mySoung = document.getElementById("myAudio"); 
+                                mySoung.muted = false;
+                                mySoung.pause();
+                            }
+                            messageData = messageData + "</tbody></table>";
+                            
+                            document.getElementById("hostingDive").innerHTML = messageData;
+                            /*document.getElementById("userid").value                  =    myObj.user_id              ;
+                            document.getElementById("name").value                    =    myObj.name                 ;
+                    	    document.getElementById("userSurname").value             =    myObj.surname              ;
+                    	    document.getElementById("userIdNumber").value            =    myObj.id_number            ;
+                    	    document.getElementById("userAddress").value             =    myObj.Address              ;
+                    	    document.getElementById("userMedicalAidName").value      =    myObj.Medical_Aid_Name     ;
+                    	    document.getElementById("MedicalAidNumber").value        =    myObj.Medical_Aid_Number   ;
+                    	    document.getElementById("MedicalAidConatct").value       =    myObj.Medical_Aid_Conatct  ;*/
+                            $('#fromAjax').html(data);  //Update here with the response
+                        }
+                    );
+                  }
+                  
+                  , 2000); 
+                   
+                           
+                }
+            );
+        }
+        function changeStatus()
+        {
+            
+            var url_string = window.location.href;
+            var url = new URL(url_string);
+            var username = url.searchParams.get("username");
+            var usertype = url.searchParams.get("usertype");
+            document.getElementById("usernamHolder").innerHTML = username;
+            if(usertype == "USER_POLICE")
+            {
+                type = "police";
+            }
+            else
+            if(usertype == "USER_FIRE")
+            {
+                type = "fire";
+            }
+            else
+            if(usertype == "USER_AMBULANCE")
+            {
+                type = "ambulance";
+            }
+            else
+            {
+                type = "fire"
+            }
+            
+            if (document.getElementById("flexSwitchCheckDefault").checked)
+            {
+                updateStatus = "emergency_online";
+            }
+            else
+            {
+                updateStatus = "emergency_offline";
+            }
+            emgId = document.getElementById("police_id").value;
+            
+            $.post(                             //call the server
+                "/updateEmergencyStatus.php",                     //At this url
+                {
+                    status: updateStatus,
+                    emergrncyId: emgId,
+                    type:type
+                }                               //And send this data to it
+            ).done(                             //And when it's done
+                function(data)
+                {
+                      
+                        }
+                    );
+        }
+        function loadEmegency()
+        {
+          //document.getElementById("hostingDive").innerHTML = "<a href='#'> Hello Wolrd </a>";
+          //setInterval(function(){ location.reload(); }, 120000);
+            var url_string = window.location.href;
+            var url = new URL(url_string);
+            var username = url.searchParams.get("username");
+            var usertype = url.searchParams.get("usertype");
+            document.getElementById("usernamHolder").innerHTML = username;
+            
+            policeid = getEmergencyDetails(username , usertype);
+            
+           //policeid = document.getElementById("userid").value;
+           
+          $.post(                             //call the server
+                "/getMessages.php",                     //At this url
+                {
+                    username: username,
+                    policeid: policeid
+                }                               //And send this data to it
+            ).done(                             //And when it's done
+                function(data)
+                {
+                    var str = trimChar(data,'[');
+                    str = trimChar(str,']');
+                    var myObj = str.split("},{");
+                    //alert(myObj[0] + "}");
+                    messageData = "<table class='table'><thead><tr><th>Alert</th><th></th><th>Video</th></tr></thead><tbody>";
+                    myObj.forEach(function(item) 
+                        {
+                            //my = JSON.parse(item);
+                            if (item.indexOf('}') == -1)
+                            {
+                                item = item + "}";
+                            }
+                            if(item.indexOf('{')) 
+                            {
+                                item = "{" + item  ;
+                            }
+                            my = JSON.parse(item);
+                            if(my.message_status == "message_new")
+                            {
+                                newClass = "info";
+                                //mySoung.play();
+                            }
+                            else
+                            {
+                                newClass = ""
+                            }
+                            //alert(my.message_status) msg_id
+                            messageData = messageData + "<tr class='" + newClass +"'><td style='display:none;'>" + my.msg_id + "</t><td style='display:none;'>" + my.user_id_from + "</td><td>" + my.message + "</td><td><a href='#' onclick='openMessage(this)' ><span class='glyphicon glyphicon-envelope'></span></a></td><td><a href='/uploads/" + my.multimedia_string+ "' target='_blank'>Video</a></td></tr>  ";
+                            
+                           
+                        }
+                    );
+                    messageData = messageData + "</tbody></table>";
+                    
+                    document.getElementById("hostingDive").innerHTML = messageData;
+                    /*document.getElementById("userid").value                  =    myObj.user_id              ;
+                    document.getElementById("name").value                    =    myObj.name                 ;
+            	    document.getElementById("userSurname").value             =    myObj.surname              ;
+            	    document.getElementById("userIdNumber").value            =    myObj.id_number            ;
+            	    document.getElementById("userAddress").value             =    myObj.Address              ;
+            	    document.getElementById("userMedicalAidName").value      =    myObj.Medical_Aid_Name     ;
+            	    document.getElementById("MedicalAidNumber").value        =    myObj.Medical_Aid_Number   ;
+            	    document.getElementById("MedicalAidConatct").value       =    myObj.Medical_Aid_Conatct  ;*/
+                    $('#fromAjax').html(data);  //Update here with the response
+                }
+            );
+      }
+        function openMessage(row)
+        {
+            //var id = $(this).closest("tr").find('td:eq(1)').text();
+            
+            msgId = row.closest("tr").cells[0].innerHTML;
+            $.post(                             //call the server
+                "/updateMessage.php",                     //At this url
+                {
+                    msg_id: msgId
+                }                               //And send this data to it
+            ).done(                             //And when it's done
+                function(data)
+                {
+                    
+                    location.reload();  
+                           
+                        }
+                    );
+        }
+        
+    </script>
+    
+</head>
+<body class="crm_body_bg" onload ="getEmergencyDetails()" >
+    
+<div id="sound" style="display:none;">
+    <button id="play_Sound" onclick="playAudio()" type="button">Play Audio</button>
+    <button onclick="pauseAudio()" type="button">Pause Audio</button> 
+    
+    <!--<iframe src="/sounds/250-milliseconds-of-silence.mp3" allow="autoplay" id="audio" style="display: none"></iframe>
+    -->
+    
+    <audio id="myAudio"  autoplay loop controls>
+        <source src="/sounds/PoliceSiren.mp3" type="audio/mpeg">
+    </audio>
+    
+</div>
+<div onmouseover="playAudio()">
+<!-- main content part here -->
+ 
+ <!-- sidebar  -->
+ <!-- sidebar part here -->
+<nav class="sidebar">
+    <div class="logo d-flex justify-content-between">
+        <a href="index.html"><img src="img/medicall.jpg" alt=""></a>
+        <div class="sidebar_close_icon d-lg-none">
+            <i class="ti-close"></i>
+        </div>
+    </div>
+    <ul id="sidebar_menu">
+       <!-- <li class="side_menu_title">
+            <span>Menu</span>
+          </li>-->
+        <li class="mm-active">
+          <a class="has-arrow"  href="#"  aria-expanded="false">
+          <!-- <i class="fas fa-th"></i> -->
+          <img src="img/menu-icon/1.svg" alt="">
+            <span>Menu</span>
+          </a>
+          <ul>
+            <li><a class="active" href="#" onclick="goToIndex()">Dashboard</a></li>
+          </ul>
+        </li>
+      </ul>
+    
+</nav>
+<!-- sidebar part end -->
+ <!--/ sidebar  -->
+
+
+<section class="main_content dashboard_part">
+        <!-- menu  -->
+    <div class="container-fluid no-gutters">
+        <div class="row">
+            <div class="col-lg-12 p-0">
+                <div class="header_iner d-flex justify-content-between align-items-center">
+                    <div class="sidebar_icon d-lg-none">
+                        <i class="ti-menu"></i>
+                    </div>
+                    <div class="serach_field-area">
+                            <div class="search_inner">
+                                <form action="#">
+                                    <div class="search_field">
+                                        <input type="text" placeholder="Search here..." >
+                                    </div>
+                                    <button type="submit"> <img src="img/icon/icon_search.svg" alt=""> </button>
+                                </form>
+                            </div>
+                        </div>
+                    <div class="header_right d-flex justify-content-between align-items-center">
+                        <div class="header_notification_warp d-flex align-items-center">
+                            <li>
+                                <a href="#"> <img src="img/icon/bell.svg" alt=""> </a>
+                            </li>
+                            <li>
+                                <a href="#"> <img src="img/icon/msg.svg" alt=""> </a>
+                            </li>
+                        </div>
+                        
+                        <div class="profile_info">
+                            <img src="img/logo.jpg" alt="#">
+                            <div class="profile_info_iner">
+                                <p id="userFullname"> </p>
+                                <h5 id="usernamHolder"></h5>
+                                <div class="profile_info_details">
+                                    <!--<a href="#" onclick="goToupdate()">My Profile <i class="ti-user"></i></a>
+                                    <a href="#">Settings <i class="ti-settings"></i></a> -->
+                                    <a href="/login.html">Log Out <i class="ti-shift-left"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--/ menu  -->
+    <div class="main_content_iner ">
+        <div class="container-fluid p-0">
+            <div class="row justify-content-center">
+                <div class="col-lg-12">
+                    <div class="single_element">
+                        <div class="quick_activity">
+                            <div class="row">
+                                <div class="form-check form-switch">
+                                    
+                                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" onclick="changeStatus()">
+  
+                                    <label class="form-check-label" for="flexSwitchCheckCheckedDisabled">Status</label>
+                                </div>
+                                <h5 id="hostingDive"  >
+        
+                                </h5>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-body">
+        <form>
+            <div class="form-group">
+                <input id="userid" type="hidden" class="form-control" placeholder="userId" >
+            </div>
+            <div class="form-group">
+                <input id="police_id" type="hidden" class="form-control" placeholder="Name" >
+            </div>
+            <div class="form-group">
+                <input id="police_name" type="hidden" class="form-control" placeholder="Lastname">
+            </div>
+            <div class="form-group">
+                <input id="police_address" type="hidden" class="form-control" placeholder="ID Number/Passport">
+            </div>
+            <div class="form-group">
+                <input id="address_lat" type="hidden" class="form-control" placeholder="Home Adress">
+            </div>
+            <div class="form-group">
+                <input id="address_long" type="hidden" class="form-control" placeholder="Medical Aid Name">
+            </div>
+            <div class="form-group">
+                <input id="police_status" type="hidden" class="form-control" placeholder="Medical Aid Number">
+            </div>
+            <div class="form-group">
+                <input id="MedicalAidConatct" type="hidden" class="form-control" placeholder="Medical Aid Conatct">
+            </div>
+            <div class="form-group">
+                <input id="userPhonenumber" type="hidden" class="form-control" placeholder="Medical Aid Conatct">
+            </div>
+            
+        </form>
+    </div>
+
+<!-- footer part -->
+<div class="footer_part">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="footer_iner text-center">
+                    <p>2020 © Influence - Designed by <a href="#"> <i class="ti-heart"></i> </a><a href="#"> Samkelo Zuma</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+<!-- main content part end -->
+
+<!-- footer  -->
+<!-- jquery slim -->
+<script src="js/jquery-3.4.1.min.js"></script>
+<!-- popper js -->
+<script src="js/popper.min.js"></script>
+<!-- bootstarp js -->
+<script src="js/bootstrap.min.js"></script>
+<!-- sidebar menu  -->
+<script src="js/metisMenu.js"></script>
+<!-- waypoints js -->
+<script src="vendors/count_up/jquery.waypoints.min.js"></script>
+<!-- waypoints js -->
+<script src="vendors/chartlist/Chart.min.js"></script>
+<!-- counterup js -->
+<script src="vendors/count_up/jquery.counterup.min.js"></script>
+<!-- swiper slider js -->
+<script src="vendors/swiper_slider/js/swiper.min.js"></script>
+<!-- nice select -->
+<script src="vendors/niceselect/js/jquery.nice-select.min.js"></script>
+<!-- owl carousel -->
+<script src="vendors/owl_carousel/js/owl.carousel.min.js"></script>
+<!-- gijgo css -->
+<script src="vendors/gijgo/gijgo.min.js"></script>
+<!-- responsive table -->
+<script src="vendors/datatable/js/jquery.dataTables.min.js"></script>
+<script src="vendors/datatable/js/dataTables.responsive.min.js"></script>
+<script src="vendors/datatable/js/dataTables.buttons.min.js"></script>
+<script src="vendors/datatable/js/buttons.flash.min.js"></script>
+<script src="vendors/datatable/js/jszip.min.js"></script>
+<script src="vendors/datatable/js/pdfmake.min.js"></script>
+<script src="vendors/datatable/js/vfs_fonts.js"></script>
+<script src="vendors/datatable/js/buttons.html5.min.js"></script>
+<script src="vendors/datatable/js/buttons.print.min.js"></script>
+
+<script src="js/chart.min.js"></script>
+<!-- progressbar js -->
+<script src="vendors/progressbar/jquery.barfiller.js"></script>
+<!-- tag input -->
+<script src="vendors/tagsinput/tagsinput.js"></script>
+<!-- text editor js -->
+<script src="vendors/text_editor/summernote-bs4.js"></script>
+
+<script src="vendors/apex_chart/apexcharts.js"></script>
+
+<!-- custom js -->
+<script src="js/custom.js"></script>
+
+<script src="vendors/apex_chart/bar_active_1.js"></script>
+<script src="vendors/apex_chart/apex_chart_list.js"></script>
+<script src="dist/attention.js"></script>
+</div>
+</body>
+
+<!-- Mirrored from demo.dashboardpack.com/hospital-html/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 20 Apr 2021 10:56:19 GMT -->
+</html>

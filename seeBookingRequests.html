@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>SEE APPOINTMENT REQUESTS</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <!-- themefy CSS -->
+    <link rel="stylesheet" href="vendors/themefy_icon/themify-icons.css" />
+    <!-- swiper slider CSS -->
+    <link rel="stylesheet" href="vendors/swiper_slider/css/swiper.min.css" />
+    <!-- select2 CSS -->
+    <link rel="stylesheet" href="vendors/select2/css/select2.min.css" />
+    <!-- select2 CSS -->
+    <link rel="stylesheet" href="vendors/niceselect/css/nice-select.css" />
+    <!-- owl carousel CSS -->
+    <link rel="stylesheet" href="vendors/owl_carousel/css/owl.carousel.css" />
+    <!-- gijgo css -->
+    <link rel="stylesheet" href="vendors/gijgo/gijgo.min.css" />
+    <!-- font awesome CSS -->
+    <link rel="stylesheet" href="vendors/font_awesome/css/all.min.css" />
+    <link rel="stylesheet" href="vendors/tagsinput/tagsinput.css" />
+    <!-- datatable CSS -->
+    <link rel="stylesheet" href="vendors/datatable/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="vendors/datatable/css/responsive.dataTables.min.css" />
+    <link rel="stylesheet" href="vendors/datatable/css/buttons.dataTables.min.css" />
+    <!-- text editor css -->
+    <link rel="stylesheet" href="vendors/text_editor/summernote-bs4.css" />
+    <!-- morris css -->
+    <link rel="stylesheet" href="vendors/morris/morris.css">
+    <!-- metarial icon css -->
+    <link rel="stylesheet" href="vendors/material_icon/material-icons.css" />
+
+    <!-- menu css  -->
+    <link rel="stylesheet" href="css/metisMenu.css">
+    <!-- style CSS -->
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/colors/default.css" id="colorSkinCSS">
+    <link href="dist/attention.css" rel="stylesheet">
+    
+    <!-- Boostrap
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">c-->
+ <style type="text/css">
+     
+
+   .registration-form{
+      background: #f7f7f7;
+      padding: 20px;
+     
+      margin: 100px 0px;
+    }
+    .err-msg{
+      color:red;
+    }
+    .registration-form form{
+      border: 1px solid #e8e8e8;
+      padding: 10px;
+      background: #f3f3f3;
+    }
+  </style>
+   
+    <script>
+    
+    
+    
+    function trimChar(string, charToRemove) 
+      {
+            while(string.charAt(0)==charToRemove) {
+                string = string.substring(1);
+            }
+        
+            while(string.charAt(string.length-1)==charToRemove) {
+                string = string.substring(0,string.length-1);
+            }
+        
+            return string;
+        }
+    function deleteRow(btn) {
+      var row = btn.parentNode.parentNode;
+      row.parentNode.removeChild(row);
+    }
+    function updateDetails()
+        {
+            var booking_number              = document.getElementById("booking_number").value             ;
+            var patient_name            = document.getElementById("patient_name").value           ;
+    	    var patient_surname         = document.getElementById("patient_surname").value        ;
+    	    var patient_number        = document.getElementById("patient_number").value       ;
+    	    var patient_address         = document.getElementById("patient_address").value        ;
+    	    var MedicalAidName  = document.getElementById("MedicalAidName").value ;
+    	    var MedicalAidNumber    = document.getElementById("MedicalAidNumber").value   ;
+    	    var _date   = document.getElementById("_date").value  ;
+    	    var _time   = document.getElementById("_time").value  ;
+    	    
+    	    $.post(                             //call the server
+                "/UpdateMedicDetails.php",                     //At this url
+                {
+                    booking_number: booking_number,
+                    patient_name: patient_name,
+                    patient_number: patient_number,
+                    patient_surname: patient_surname,
+                    patient_address: patient_address,
+                    MedicalAidName: MedicalAidName,
+                    MedicalAidNumber: MedicalAidNumber,
+                    //MedicalAidConatct: MedicalAidConatct
+                }                               //And send this data to it
+            ).done(                             //And when it's done
+                function(data)
+                {
+                    $('#fromAjax').html(data);  //Update here with the response
+                    location.reload();
+                }
+            );
+    	    
+        }
+    function getUSerDetails()       {
+            var url_string = window.location.href;
+            var url = new URL(url_string);
+            var username = url.searchParams.get("username");
+            document.getElementById("usernamHolder").innerHTML = username;
+            
+            $.post(                             //call the server
+                "/getUserDetails.php",                     //At this url
+                {
+                    username: username
+                }                               //And send this data to it
+            ).done(                             //And when it's done
+                function(data)
+                {
+                    var str = trimChar(data,'[');
+                    str = trimChar(str,']');
+                    var myObj = JSON.parse(str);
+                    
+                    document.getElementById("userid").value                  =    myObj.user_id              ;
+                    document.getElementById("name").value                    =    myObj.name                 ;
+            	    document.getElementById("userSurname").value             =    myObj.surname              ;
+            	    document.getElementById("userIdNumber").value            =    myObj.id_number            ;
+            	    document.getElementById("userAddress").value             =    myObj.Address              ;
+            	    document.getElementById("userMedicalAidName").value      =    myObj.Medical_Aid_Name     ;
+            	    document.getElementById("MedicalAidNumber").value        =    myObj.Medical_Aid_Number   ;
+            	    document.getElementById("MedicalAidConatct").value       =    myObj.Medical_Aid_Conatct  ;
+            	    document.getElementById("fullname").innerHTML            =    myObj.name + " " + myObj.surname;
+            	    
+            	    document.getElementById("P_name").value                  =    myObj.name              ;
+            	    document.getElementById("P_surname").value               =    myObj.surname     ;
+            	    document.getElementById("P_number").value                =    myObj.User_Cellnumber   ;
+            	    document.getElementById("P_address").value               =    myObj.Address  ;
+            	    //document.getElementById("fullname").innerHTML            =    myObj.name + " " + myObj.surname;
+            	    //document.getElementById("UserCellnumber").value          =    myObj.User_Cellnumber;
+            	    
+                    $('#fromAjax').html(data);  //Update here with the response fullname
+                }
+            ).then(
+            function (data)
+                {
+                    AppointmentRequests();
+                }
+            );
+        }
+        
+    function sendRequest()
+    {
+        P_name          = document.getElementById("P_name").value;
+        P_surname       = document.getElementById("P_surname").value;
+        P_number        = document.getElementById("P_number").value;
+        P_age           = document.getElementById("P_age").value;
+        P_address       = document.getElementById("P_address").value;
+        reason_comment  = document.getElementById("reason_comment").value;
+        _date1          = document.getElementById("_date1").value;
+        _date2          = document.getElementById("_date2").value;
+        _date3          = document.getElementById("_date3").value;
+        suitable_time   = document.getElementById("suitable_time").value;
+        $.post(                             //call the server
+                "/addAppointmentRequest.php",                     //At this url
+                {
+                    P_name:         P_name,
+                    P_surname:      P_surname,
+                    P_number:       P_number,
+                    P_age:          P_age,
+                    P_address:      P_address,
+                    reason_comment: reason_comment,
+                    _date1:         _date1,
+                    _date2:         _date2,
+                    _date3:         _date3,
+                    suitable_time:  suitable_time
+                }                               //And send this data to it
+            ).done(                             //And when it's done
+                function(data)
+                {
+                   
+                });
+                
+    }
+    function goToupdate()
+        {
+            var url_string = window.location.href;
+            var url = new URL(url_string);
+            var userId = url.searchParams.get("username");
+            var parm = "username="+userId;
+            window.location.href = "/updateUserdeatils.html?"+parm;
+        }
+    
+    function test()//successMedic???
+        {
+            navigator.geolocation.getCurrentPosition(successPolice); 
+            
+        }
+    function goToIndex()
+        {
+            var url_string = window.location.href;
+            var url = new URL(url_string);
+            var username = url.searchParams.get("username");
+            var usertype = url.searchParams.get("usertype");
+            var parm = "username=" + username + "&usertype=" + usertype;
+            window.location.href = "index.html?"+parm;
+        }
+    
+    function goToAppointments()
+        {
+            var url_string = window.location.href;
+            var url = new URL(url_string);
+            var userId = url.searchParams.get("username");
+            var parm = "username="+userId;
+            window.location.href = "/medic_bookings.html?"+parm;
+        }
+    function goToMedicRequests()
+        {
+            var url_string = window.location.href;
+            var url = new URL(url_string);
+            var username = url.searchParams.get("username");
+            var usertype = url.searchParams.get("usertype");
+            var parm = "username=" + username + "&usertype=" + usertype;
+            window.location.href = "/seeBookingRequests.html?"+parm;
+        }
+    
+    function getEmergencyDetails(username , usertype )
+        {
+            var url_string = window.location.href;
+            var url = new URL(url_string);
+            var username = url.searchParams.get("username");
+            var usertype = url.searchParams.get("usertype");
+            $.post(                             //call the server
+                "/getEmegerncyDetails.php",                     //At this url
+                {
+                    username: username,
+                    usertype: usertype
+                }                               //And send this data to it
+            ).done(                             //And when it's done
+                function(data)
+                {
+                    var str = trimChar(data,'[');
+                    str = trimChar(str,']');
+                    var myObj = JSON.parse(str);
+                    
+                    
+                    document.getElementById("medic_id").value            =    myObj.medic_id              ;
+                    document.getElementById("medic_status").value        =    myObj.medic_status            ;
+            	    document.getElementById("medic_name").value          =    myObj.medic_name          ;
+            	    document.getElementById("medic_address").value       =    myObj.medic_address       ;
+            	    document.getElementById("address_lat").value         =    myObj.address_lat          ;
+            	    document.getElementById("address_long").value        =    myObj.address_long         ;
+            	    document.getElementById("user_id").value             =    myObj.user_id        ;
+            	    
+            	    //checked
+            	    
+            	    if (myObj.medic_status == "emergency_online")
+            	    {
+            	        document.getElementById("flexSwitchCheckDefault").checked = true;
+            	    }
+            	    
+                    $('#fromAjax').html(data);  //Update here with the response
+                }
+            );
+        }
+    
+    function changeStatus()
+        {
+            
+            
+            if (document.getElementById("flexSwitchCheckDefault").checked)
+            {
+                updateStatus = "emergency_online";
+            }
+            else
+            {
+                updateStatus = "emergency_offline";
+            }
+            
+        }
+    function loadAppointments()
+      {
+          //document.getElementById("hostingDive").innerHTML = "<a href='#'> Hello Wolrd </a>";
+          //setInterval(function(){ location.reload(); }, 120000);
+          $.post(                             //call the server
+                "/getMedicalBooking.php",                     //At this url
+                {
+                    username: "username",
+                    medic_id: "2"
+                }                               //And send this data to it
+            ).done(                             //And when it's done
+                function(data)
+                {
+                    var str = trimChar(data,'[');
+                    str = trimChar(str,']');
+                    var myObj = str.split("},{");
+                    //alert(myObj[0] + "}");
+                    messageData = "<table class='table'><thead><tr><th>Date</th><th>Time</th><th>Patient name</th><th>Patient surname</th><th>Patient number</th><th>Patient address</th><th>Medical Aid Name</th><th>Medical Aid Number</th><th>Appointment status </th><th>booking number</th></tr></thead><tbody>";
+                    
+                    /*<tr><th>Date</th><th>Time</th><th>Patient name</th><th>Patient surname</th><th>Patient number</th><th>Patient address</th><th>Medical Aid Name</th><th>Medical Aid Number</th><th>Appointment status </th></tr>*/
+                    
+                    myObj.forEach(function(item) 
+                        {
+                            //my = JSON.parse(item);
+                            if (item.indexOf('}') == -1)
+                            {
+                                item = item + "}";
+                            }
+                            if(item.indexOf('{')) 
+                            {
+                                item = "{" + item  ;
+                            }
+                            my = JSON.parse(item);
+                            
+                            /*<tr class='info'><td>" + my.user_id_from + "</td><td>" + my.message + "</td></tr>  */
+                            messageData = messageData + "<tr class='info'><td>" + my._date  + "</td><td>" + my._time  + "</td><td>" + my.patient_name  + "</td><td>" + my.patient_surname  + "</td><td>" +  my.patient_number + "</td><td>" +  my.patient_address + "</td><td>" +  my.MedicalAid_Name + "</td><td>" + my.MedicalAid_Number  + "</td><td>" + my.booking_status  + "</td><td>" + my.booking_number + "</td></tr>  ";
+                            
+                           
+                        }
+                    );
+                    messageData = messageData + "</tbody></table>";
+                    
+                    
+                    document.getElementById("hostingDive").innerHTML = messageData;
+                    /*document.getElementById("userid").value                  =    myObj.user_id              ;
+                    document.getElementById("name").value                    =    myObj.name                 ;
+            	    document.getElementById("userSurname").value             =    myObj.surname              ;
+            	    document.getElementById("userIdNumber").value            =    myObj.id_number            ;
+            	    document.getElementById("userAddress").value             =    myObj.Address              ;
+            	    document.getElementById("userMedicalAidName").value      =    myObj.Medical_Aid_Name     ;
+            	    document.getElementById("MedicalAidNumber").value        =    myObj.Medical_Aid_Number   ;
+            	    document.getElementById("MedicalAidConatct").value       =    myObj.Medical_Aid_Conatct  ;*/
+                    $('#fromAjax').html(data);  //Update here with the response
+                }
+            );
+            loadEmegency();
+      }
+    
+    function ConfirmDelete()
+    {
+      var x = confirm("Are you sure you want to delete this appointment?");
+      if (x)
+          return true;
+      else
+        return false;
+    }
+    
+    function loadEmegency()
+        {
+          //document.getElementById("hostingDive").innerHTML = "<a href='#'> Hello Wolrd </a>";
+          //setInterval(function(){ location.reload(); }, 120000);
+            var url_string = window.location.href;
+            var url = new URL(url_string);
+            var username = url.searchParams.get("username");
+            var usertype = url.searchParams.get("usertype");
+            document.getElementById("usernamHolder").innerHTML = username;
+            getEmergencyDetails(username , usertype);
+          $.post(                             //call the server
+                "/getMessages.php",                     //At this url
+                {
+                    username: username,
+                    policeid: "1"
+                }                               //And send this data to it
+            ).done(                             //And when it's done
+                function(data)
+                {
+                    var str = trimChar(data,'[');
+                    str = trimChar(str,']');
+                    var myObj = str.split("},{");
+                    //alert(myObj[0] + "}");
+                    messageData = "<table class='table'><thead><tr><th>Alert</th><th></th></tr></thead><tbody>";
+                    myObj.forEach(function(item) 
+                        {
+                            //my = JSON.parse(item);
+                            if (item.indexOf('}') == -1)
+                            {
+                                item = item + "}";
+                            }
+                            if(item.indexOf('{')) 
+                            {
+                                item = "{" + item  ;
+                            }
+                            my = JSON.parse(item);
+                            if(my.message_status == "message_new")
+                            {
+                                newClass = "info";
+                            }
+                            else
+                            {
+                                newClass = ""
+                            }
+                            //alert(my.message_status) msg_id
+                            messageData = messageData + "<tr class='" + newClass +"'><td style='display:none;'>" + my.msg_id + "</t><td style='display:none;'>" + my.user_id_from + "</td><td>" + my.message + "</td><td><a href='#' onclick='openMessage(this)' ><span class='glyphicon glyphicon-envelope'></span></a></td></tr>  ";
+                            
+                           
+                        }
+                    );
+                    messageData = messageData + "</tbody></table>";
+                    //loadAppointments();
+                    
+                    document.getElementById("hostingDive").innerHTML = messageData;
+                    /*document.getElementById("userid").value                  =    myObj.user_id              ;
+                    document.getElementById("name").value                    =    myObj.name                 ;
+            	    document.getElementById("userSurname").value             =    myObj.surname              ;
+            	    document.getElementById("userIdNumber").value            =    myObj.id_number            ;
+            	    document.getElementById("userAddress").value             =    myObj.Address              ;
+            	    document.getElementById("userMedicalAidName").value      =    myObj.Medical_Aid_Name     ;
+            	    document.getElementById("MedicalAidNumber").value        =    myObj.Medical_Aid_Number   ;
+            	    document.getElementById("MedicalAidConatct").value       =    myObj.Medical_Aid_Conatct  ;*/
+                    $('#fromAjax').html(data);  //Update here with the response
+                }
+            );
+       }
+    
+    function openMessage(row)
+        {
+            //var id = $(this).closest("tr").find('td:eq(1)').text();
+            
+            msgId = row.closest("tr").cells[0].innerHTML;
+            $.post(                             //call the server
+                "/updateMessage.php",                     //At this url
+                {
+                    msg_id: msgId
+                }                               //And send this data to it
+            ).done(                             //And when it's done
+                function(data)
+                {
+                    
+                    location.reload();  
+                           
+                        }
+                    );
+        }
+        
+    function AppointmentRequests()
+    {
+      //document.getElementById("hostingDive").innerHTML = "<a href='#'> Hello Wolrd </a>";
+      //setInterval(function(){ location.reload(); }, 120000);
+      /*  var url_string = window.location.href;
+        var url = new URL(url_string);
+        var username = url.searchParams.get("username");
+        var usertype = url.searchParams.get("usertype");
+        document.getElementById("usernamHolder").innerHTML = username;
+        getEmergencyDetails(username , usertype);*/
+      $.post(                             //call the server
+            "/getAppointmentRequests.php",                     //At this url
+            {
+                
+                user_id: document.getElementById("userid").value
+            }                               //And send this data to it
+        ).done(                             //And when it's done
+            function(data)
+            {
+                var str = trimChar(data,'[');
+                str = trimChar(str,']');
+                var myObj = str.split("},{");
+                //alert(myObj[0] + "}");
+                messageData = "<font size='1' ><table class='table' style='text-align:center;'><thead><tr><th>Patient Name</th><th>Patient Surname</th><th>Date1</th><th>Date2</th><th>Date3</th><th>Time</th><th>Reason</th><th>Request status </th></tr></thead><tbody>";
+                myObj.forEach(function(item) 
+                    {
+                         //my = JSON.parse(item);
+                        if (item.indexOf('}') == -1)
+                        {
+                            item = item + "}";
+                        }
+                        if(item.indexOf('{')) 
+                        {
+                            item = "{" + item  ;
+                        }
+                        my = JSON.parse(item);
+                        
+                        /*<tr class='info'><td>" + my.user_id_from + "</td><td>" + my.message + "</td></tr>  */
+                        messageData = messageData + "<tr class='info' style='text-align:center'><td>" + my.P_name  + "</td><td>" + my.P_surname  + "</td><td>" + my._date1  + "</td><td>" + my._date2  + "</td><td>" + my._date3  + "</td><td>" + my.suitable_time  + "</td><td>" + my.reason_comment  + "</td><td>" + my.request_status   + "</td><td>" + "</td></tr>  ";
+                        
+                        
+                       
+                    }
+                );
+                messageData = messageData + "</tbody></table>";
+                
+                document.getElementById("hostingDive").innerHTML = messageData;
+                /*document.getElementById("userid").value                  =    myObj.user_id              ;
+                document.getElementById("name").value                    =    myObj.name                 ;
+        	    document.getElementById("userSurname").value             =    myObj.surname              ;
+        	    document.getElementById("userIdNumber").value            =    myObj.id_number            ;
+        	    document.getElementById("userAddress").value             =    myObj.Address              ;
+        	    document.getElementById("userMedicalAidName").value      =    myObj.Medical_Aid_Name     ;
+        	    document.getElementById("MedicalAidNumber").value        =    myObj.Medical_Aid_Number   ;
+        	    document.getElementById("MedicalAidConatct").value       =    myObj.Medical_Aid_Conatct  ;*/
+                $('#fromAjax').html(data);  //Update here with the response
+            }
+        );
+    }
+  
+  
+    function MedicBookings()
+    {
+      //document.getElementById("hostingDive").innerHTML = "<a href='#'> Hello Wolrd </a>";
+      //setInterval(function(){ location.reload(); }, 120000);
+      /*  var url_string = window.location.href;
+        var url = new URL(url_string);
+        var username = url.searchParams.get("username");
+        var usertype = url.searchParams.get("usertype");
+        document.getElementById("usernamHolder").innerHTML = username;
+        getEmergencyDetails(username , usertype);*/
+      $.post(                             //call the server
+            "/getMedicBookings.php",                     //At this url
+            {
+                user_id: document.getElementById("userid").value
+            }                               //And send this data to it
+        ).done(                             //And when it's done
+            function(data)
+            {
+                
+                var str = trimChar(data,'[');
+                str = trimChar(str,']');
+                var myObj = str.split("},{");
+                //alert(myObj[0] + "}");
+                messageData = "<font size='1' ><table class='table'><thead><tr><th>Patient Name</th><th>Patient Surname</th><th>Patient Address</th><th>Booking Status</th><th>Date</th><th>Time</th><th>Medical Aid Name</th><th>Medical Aid Number </th><th>Booking Number</th></tr></thead><tbody>";
+                myObj.forEach(function(item) 
+                    {
+                         //my = JSON.parse(item);
+                        if (item.indexOf('}') == -1)
+                        {
+                            item = item + "}";
+                        }
+                        if(item.indexOf('{')) 
+                        {
+                            item = "{" + item  ;
+                        }
+                        my = JSON.parse(item);
+                        
+                        /*<tr class='info'><td>" + my.user_id_from + "</td><td>" + my.message + "</td></tr>  */
+                        messageData = messageData + "<tr class='info' style='text-align:center'><td>" + my.Patient_name  + "</td><td>" + my.Patient_surname  + "</td><td>" + my.Patient_address  + "</td><td>" + my.booking_status  + "</td><td>" + my._date  + "</td><td>" + my._time  + "</td><td>" + my.MedicalAid_Name  + "</td><td>" + my.MedicalAid_Number   + "</td><td>" + my.booking_number   + "</td></tr>  ";
+                        
+                        
+                       
+                    }
+                );
+                messageData = messageData + "</tbody></table>";
+                
+                document.getElementById("hostingDive2").innerHTML = messageData;
+                /*document.getElementById("userid").value                  =    myObj.user_id              ;
+                document.getElementById("name").value                    =    myObj.name                 ;
+        	    document.getElementById("userSurname").value             =    myObj.surname              ;
+        	    document.getElementById("userIdNumber").value            =    myObj.id_number            ;
+        	    document.getElementById("userAddress").value             =    myObj.Address              ;
+        	    document.getElementById("userMedicalAidName").value      =    myObj.Medical_Aid_Name     ;
+        	    document.getElementById("MedicalAidNumber").value        =    myObj.Medical_Aid_Number   ;
+        	    document.getElementById("MedicalAidConatct").value       =    myObj.Medical_Aid_Conatct  ;*/
+                $('#fromAjax').html(data);  //Update here with the response
+            }
+        )
+    }
+        
+</script>
+</head>
+<body class="crm_body_bg" onload="getUSerDetails()">
+    
+     <!-- sidebar  -->
+ <!-- sidebar part here -->
+<nav class="sidebar">
+    <div class="logo d-flex justify-content-between">
+        <a href="index.html"><img src="img/medicall.jpg" alt=""></a>
+        <div class="sidebar_close_icon d-lg-none">
+            <i class="ti-close"></i>
+        </div>
+    </div>
+    <ul id="sidebar_menu">
+       <!-- <li class="side_menu_title">
+            <span>Menu</span>
+          </li>-->
+        <li class="mm-active">
+          <a class="has-arrow"  href="#"  aria-expanded="false">
+          <!-- <i class="fas fa-th"></i> -->
+          <img src="img/menu-icon/1.svg" alt="">
+            <span>Menu</span>
+          </a>
+          <ul>
+            <li><a class="active" href="#" onclick="goToIndex()">Dashboard</a></li>
+            <li><a  href="#" onclick="goToAppointments()">My Appointments</a></li>
+            <li><a class = "active" href="#" onclick="goToMedicRequests()">Appointment Requests</a></li>
+          </ul>
+
+        </li>
+      </ul>
+    
+</nav>
+<!-- sidebar part end -->
+ <!--/ sidebar  -->
+    <section class="main_content dashboard_part">
+            <!-- menu  -->
+    <div class="container-fluid no-gutters">
+        <div class="row">
+            <div class="col-lg-12 p-0">
+                <div class="header_iner d-flex justify-content-between align-items-center">
+                    <div class="sidebar_icon d-lg-none">
+                        <i class="ti-menu"></i>
+                    </div>
+                    <div class="serach_field-area">
+                            <div class="search_inner">
+                                <form action="#">
+                                    <div class="search_field">
+                                        <input type="text" placeholder="Search here..." >
+                                    </div>
+                                    <button type="submit"> <img src="img/icon/icon_search.svg" alt=""> </button>
+                                </form>
+                            </div>
+                        </div>
+                    <div class="header_right d-flex justify-content-between align-items-center">
+                        <div class="header_notification_warp d-flex align-items-center">
+                            <li>
+                                <a href="#"> <img src="img/icon/bell.svg" alt=""> </a>
+                            </li>
+                            <li>
+                                <a href="#"> <img src="img/icon/msg.svg" alt=""> </a>
+                            </li>
+                        </div>
+                        <div class="profile_info">
+                            <img src="img/logo.jpg" alt="#">
+                            <div class="profile_info_iner">
+                                <p id= "fullname" ></p>
+                                <h5 id="usernamHolder"></h5>
+                                <div class="profile_info_details">
+                                    <a href="#" onclick="goToupdate()">My Profile <i class="ti-user"></i></a>
+                                    <a href="#">Settings <i class="ti-settings"></i></a>
+                                    <a href="/login.html">Log Out <i class="ti-shift-left"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--/ menu  -->
+    <!--<div class="main_content_iner ">
+        <div class="container-fluid p-0">
+            <div class="row justify-content-center">
+                <div class="col-lg-12">
+                    <div class="single_element">
+                        <div class="quick_activity">
+                            <div class="row">
+                                <div class="modal-header" >
+                                    <h3 class="modal-title" >MedicBookings</h3>
+                                </div>
+                                
+                                <h5 id="hostingDive2" class="modal-title" style="width=90%;"  >
+        
+                                </h5>
+                                 <div class="modal-header"  >
+                                        <h3 class="modal-title" >Appointment Requests</h3>
+                                    </div>
+                                <h5 id="hostingDive" style="width=90%;"  >
+        
+                                </h5>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>-->
+    <div class="main_content_iner ">
+        <div class="container-fluid p-0">
+            <div class="row justify-content-center">
+                <div class="col-lg-12">
+                    <div class="white_box">
+                        
+                                 <div class="modal-header"  >
+                                        <h3 class="modal-title" >Appointment Requests</h3>
+                                    </div>
+                                <h5 id="hostingDive" style="width=90%;"  >
+        
+                                </h5>
+                        <div class="row justify-content-center">
+                            <div class="col-lg-6">
+                                <!-- sign_in  -->
+                                
+     
+     </div>
+    </div>
+     </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    
+    <div class="modal-body">
+        <form>
+            <div class="form-group">
+                <input id="userid" type="hidden" class="form-control" placeholder="userId" >
+            </div>
+            <div class="form-group">
+                <input id="name" type="hidden" class="form-control" placeholder="Name" >
+            </div>
+           
+            <div class="form-group">
+                <input id="userAddress" type="hidden" class="form-control" placeholder="Home Adress">
+            </div><!--
+            <div class="form-group">
+                <input id="userMedicalAidName" type="hidden" class="form-control" placeholder="Medical Aid Name">
+            </div>
+            <div class="form-group">
+                <input id="MedicalAidNumber" type="hidden" class="form-control" placeholder="Medical Aid Number">
+            </div>
+            <div class="form-group">
+                <input id="MedicalAidConatct" type="hidden" class="form-control" placeholder="Medical Aid Conatct">
+            </div>
+            <div class="form-group">
+                <input id="UserCellnumber" type="hidden" class="form-control" placeholder="Medical Aid Number">
+            </div>
+            -->
+        </form>
+    </div>
+
+
+
+
+<!--<form action="deleteMedicalBooking.php" method="post">
+    <p>
+        <label for="booking_number">Delete Appointment number?:</label>
+        <input type="text" name="booking_number" >
+        
+    </p>
+   
+     <button onclick="return confirm('Are you sure you want to Delete this Appointment?');" 
+    id="btnDelete">DELETE</button>
+  
+    
+</form>-->
+<!--<h6 id="hostingDive" ></h6>-->
+        
+<!--updateEmergencyStatus
+<form action="loadEmergency"></form>-->
+</section>
+<!---==================table content end===================-->
+
+<script src="js/jquery-3.4.1.min.js"></script>
+<!-- popper js -->
+<script src="js/popper.min.js"></script>
+<!-- bootstarp js -->
+<script src="js/bootstrap.min.js"></script>
+<!-- sidebar menu  -->
+<script src="js/metisMenu.js"></script>
+<!-- waypoints js -->
+<script src="vendors/count_up/jquery.waypoints.min.js"></script>
+<!-- waypoints js -->
+<script src="vendors/chartlist/Chart.min.js"></script>
+<!-- counterup js -->
+<script src="vendors/count_up/jquery.counterup.min.js"></script>
+<!-- swiper slider js -->
+<script src="vendors/swiper_slider/js/swiper.min.js"></script>
+<!-- nice select -->
+<script src="vendors/niceselect/js/jquery.nice-select.min.js"></script>
+<!-- owl carousel -->
+<script src="vendors/owl_carousel/js/owl.carousel.min.js"></script>
+<!-- gijgo css -->
+<script src="vendors/gijgo/gijgo.min.js"></script>
+<!-- responsive table -->
+<script src="vendors/datatable/js/jquery.dataTables.min.js"></script>
+<script src="vendors/datatable/js/dataTables.responsive.min.js"></script>
+<script src="vendors/datatable/js/dataTables.buttons.min.js"></script>
+<script src="vendors/datatable/js/buttons.flash.min.js"></script>
+<script src="vendors/datatable/js/jszip.min.js"></script>
+<script src="vendors/datatable/js/pdfmake.min.js"></script>
+<script src="vendors/datatable/js/vfs_fonts.js"></script>
+<script src="vendors/datatable/js/buttons.html5.min.js"></script>
+<script src="vendors/datatable/js/buttons.print.min.js"></script>
+
+<script src="js/chart.min.js"></script>
+<!-- progressbar js -->
+<script src="vendors/progressbar/jquery.barfiller.js"></script>
+<!-- tag input -->
+<script src="vendors/tagsinput/tagsinput.js"></script>
+<!-- text editor js -->
+<script src="vendors/text_editor/summernote-bs4.js"></script>
+
+<script src="vendors/apex_chart/apexcharts.js"></script>
+
+<!-- custom js -->
+<script src="js/custom.js"></script>
+</body>

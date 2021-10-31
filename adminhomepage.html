@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+
+<!-- Mirrored from demo.dashboardpack.com/hospital-html/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 20 Apr 2021 10:54:20 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>MEDI CALL</title>
+
+    <!-- <link rel="icon" href="img/favicon.png" type="image/png"> -->
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <!-- themefy CSS -->
+    <link rel="stylesheet" href="vendors/themefy_icon/themify-icons.css" />
+    <!-- swiper slider CSS -->
+    <link rel="stylesheet" href="vendors/swiper_slider/css/swiper.min.css" />
+    <!-- select2 CSS -->
+    <link rel="stylesheet" href="vendors/select2/css/select2.min.css" />
+    <!-- select2 CSS -->
+    <link rel="stylesheet" href="vendors/niceselect/css/nice-select.css" />
+    <!-- owl carousel CSS -->
+    <link rel="stylesheet" href="vendors/owl_carousel/css/owl.carousel.css" />
+    <!-- gijgo css -->
+    <link rel="stylesheet" href="vendors/gijgo/gijgo.min.css" />
+    <!-- font awesome CSS -->
+    <link rel="stylesheet" href="vendors/font_awesome/css/all.min.css" />
+    <link rel="stylesheet" href="vendors/tagsinput/tagsinput.css" />
+    <!-- datatable CSS -->
+    <link rel="stylesheet" href="vendors/datatable/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="vendors/datatable/css/responsive.dataTables.min.css" />
+    <link rel="stylesheet" href="vendors/datatable/css/buttons.dataTables.min.css" />
+    <!-- text editor css -->
+    <link rel="stylesheet" href="vendors/text_editor/summernote-bs4.css" />
+    <!-- morris css -->
+    <link rel="stylesheet" href="vendors/morris/morris.css">
+    <!-- metarial icon css -->
+    <link rel="stylesheet" href="vendors/material_icon/material-icons.css" />
+    <script type="text/javascript" src="https://cdn.ywxi.net/js/1.js" async></script>
+    <!-- menu css  -->
+    <link rel="stylesheet" href="css/metisMenu.css">
+    <!-- style CSS -->
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/colors/default.css" id="colorSkinCSS">
+    
+    <link href="dist/attention.css" rel="stylesheet">
+    
+    <script type="text/javascript">
+        var crd ;
+        var tes = '';
+        var long = '' ; 
+        function trimChar(string, charToRemove) 
+        {
+            while(string.charAt(0)==charToRemove) {
+                string = string.substring(1);
+            }
+        
+            while(string.charAt(string.length-1)==charToRemove) {
+                string = string.substring(0,string.length-1);
+            }
+        
+            return string;
+        }
+        function createUser()
+        {
+            //addEmergencyUser.php instNAme
+            var instNAme     = document.getElementById("instNAme").value ;
+            var newUsername  = document.getElementById("newUsername").value ;
+            var newPassword  = document.getElementById("newPassword").value;
+            var InstAddress  = document.getElementById("InstAddress").value;
+            var InstLat      = document.getElementById("InstLat").value;
+            var InstLong     = document.getElementById("InstLong").value;
+            var InstType     = document.getElementById("InstType").value;
+            
+            $.post(                             //call the server userCellnumber
+                "/addEmergencyUser.php",                     //At this url
+                {
+                    fullname: instNAme,
+                    usertype: InstType,
+                    username: newUsername,
+                    password: newPassword ,
+                    address: InstAddress ,
+                    lat:InstLat,
+                    long:InstLong
+                }                               //And send this data to it
+            ).done(                             //And when it's done
+                function(data)
+                {
+                    var len = data.length;
+                    $('#fromAjax').html(data);  //Update here with the response*/
+                }
+            );
+            
+        }
+        function makeMedicalBooking()       {
+            
+            /*$patient_name = mysqli_real_escape_string($con, $_REQUEST['patient_name']);
+        $patient_surname = mysqli_real_escape_string($con, $_REQUEST['patient_surname']);
+        $Patient_number = mysqli_real_escape_string($con, $_REQUEST['patient_number']);
+        $patient_address = mysqli_real_escape_string($con, $_REQUEST['patient_address']);
+        $booking_status = mysqli_real_escape_string($con, $_REQUEST['booking_status']);
+        $MedicalAid_name = mysqli_real_escape_string($con, $_REQUEST['MedicalAid_name']);
+        $MedicalAid_number = mysqli_real_escape_string($con, $_REQUEST['MedicalAid_number']);
+        $_date = mysqli_real_escape_string($con, $_REQUEST['_date']);
+        $_time = mysqli_real_escape_string($con, $_REQUEST['_time']);
+        $booking_number = mysqli_real_escape_string($con, $_REQUEST['booking_number']);*/
+            
+            
+            $.post(                             //call the server
+                "/addMedicalBooking.php",                     //At this url
+                {
+                    patient_name:           document.getElementById("name").value,
+                    patient_surname:        document.getElementById("userSurname").value,
+                    patient_number:         document.getElementById("contactNumber").value,
+                    patient_address:        document.getElementById("userAddress").value,
+                    booking_status:         "pending",
+                    MedicalAid_name:        document.getElementById("MedicalAidName").value,
+                    MedicalAid_number:      document.getElementById("MedicalAidMemNumber").value,
+                    _date:                  document.getElementById("BookingDate").value,
+                    _time:                  document.getElementById("BookingTime").value,
+                    booking_number: ""
+                }                               //And send this data to it
+            ).done(                             //And when it's done
+                function(data)
+                {
+                    var str = trimChar(data,'[');
+                    str = trimChar(str,']');
+                    
+                    alert(data);
+                    $('#fromAjax').html(data);  //Update here with the response fullname
+                }
+            );
+        }
+        function getUSerDetails()       {
+            var url_string = window.location.href;
+            var url = new URL(url_string);
+            var username = url.searchParams.get("username");
+            document.getElementById("usernamHolder").innerHTML = username;
+            
+            $.post(                             //call the server
+                "/getUserDetails.php",                     //At this url
+                {
+                    username: username
+                }                               //And send this data to it
+            ).done(                             //And when it's done
+                function(data)
+                {
+                    var str = trimChar(data,'[');
+                    str = trimChar(str,']');
+                    var myObj = JSON.parse(str);
+                    
+                    document.getElementById("userid").value                  =    myObj.user_id              ;
+                    document.getElementById("name").value                    =    myObj.name                 ;
+            	    document.getElementById("userSurname").value             =    myObj.surname              ;
+            	    document.getElementById("userIdNumber").value            =    myObj.id_number            ;
+            	    document.getElementById("userAddress").value             =    myObj.Address              ;
+            	    document.getElementById("userMedicalAidName").value      =    myObj.Medical_Aid_Name     ;
+            	    document.getElementById("MedicalAidNumber").value        =    myObj.Medical_Aid_Number   ;
+            	    document.getElementById("MedicalAidConatct").value       =    myObj.Medical_Aid_Conatct  ;
+            	    document.getElementById("fullname").innerHTML            =    myObj.name + " " + myObj.surname;
+            	    
+            	    document.getElementById("MedicalAidName").value          =    myObj.Medical_Aid_Name              ;
+            	    document.getElementById("MedicalAidMemNumber").value     =    myObj.Medical_Aid_Number     ;
+            	    document.getElementById("MedicalAidContact").value       =    myObj.Medical_Aid_Conatct   ;
+            	    document.getElementById("memberAddress").value           =    myObj.Address  ;
+            	    document.getElementById("fullname").innerHTML            =    myObj.name + " " + myObj.surname;
+            	    document.getElementById("UserCellnumber").value          =    myObj.User_Cellnumber;
+            	    
+            	    document.getElementById("contactNumber").value          =    myObj.User_Cellnumber;
+            	    
+                    $('#fromAjax').html(data);  //Update here with the response fullname
+                }
+            );
+        }
+        function goToupdate()
+        {
+            var url_string = window.location.href;
+            var url = new URL(url_string);
+            var userId = url.searchParams.get("username");
+            var parm = "username="+userId;
+            window.location.href = "/updateUserdeatils.html?"+parm;
+        }
+        
+        function successPolice(pos) {
+              crd = pos.coords;
+              tes = pos.coords.latitude ;
+              lat = `Latitude : ${crd.latitude}`;
+              
+              var note = prompt("Please enter a note to attach ", "note");
+              
+              $.post(                             //call the server
+                "/getNearest.php",                     //At this url
+                {
+                    type:"police",
+                    latitude: tes ,
+                    longitude: pos.coords.longitude 
+                }                               //And send this data to it
+            ).done(                             //And when it's done
+                function(data)
+                {
+                    policeId = data;
+                    //Update here with the response
+                }
+            ).then( function( data ) {
+                $.post(                             //call the server
+                "/test.php",                     //At this url
+                {
+                    userid: document.getElementById("userid").value,
+                    name: document.getElementById("name").value,
+                    surname: document.getElementById("userSurname").value,
+                    userAddress: document.getElementById("userAddress").value,
+                    UserCellnumber : document.getElementById("UserCellnumber").value,
+                    policeid: data,
+                    note: note,
+                    latitude: tes ,
+                    longitude: pos.coords.longitude ,
+                    username: document.getElementById("usernamHolder").innerHTML,
+                    Type: "Police"
+                }                               //And send this data to it
+                ).done(                             //And when it's done
+                    function(data)
+                    {
+                        $('#fromAjax').html(data);  //Update here with the response
+                    }
+                );    
+            
+        } );
+            
+            
+        }
+        function successAmbulane(pos) {
+              crd = pos.coords;
+              tes = pos.coords.latitude ;
+              lat = `Latitude : ${crd.latitude}`;
+              var note = prompt("Please enter a note to attach ", "note");
+              
+              $.post(                             //call the server
+                "/getNearest.php",                     //At this url
+                {
+                    type:"ambulance",
+                    latitude: tes ,
+                    longitude: pos.coords.longitude 
+                }                               //And send this data to it
+            ).done(                             //And when it's done
+                function(data)
+                {
+                    policeId = data;
+                    //Update here with the response
+                }
+            ).then( function( data ) {
+              
+                  $.post(                             //call the server
+                    "/test.php",                     //At this url
+                    {
+                        userid: document.getElementById("userid").value,
+                        name: document.getElementById("name").value,
+                        surname: document.getElementById("userSurname").value,
+                        UserCellnumber : document.getElementById("UserCellnumber").value,
+                        userAddress: document.getElementById("userAddress").value,
+                        note: note,
+                        policeid: data,
+                        latitude: tes ,
+                        longitude: pos.coords.longitude ,
+                        username: document.getElementById("usernamHolder").innerHTML,
+                        Type: "ambulace"
+                    }                               //And send this data to it
+                ).done(                             //And when it's done
+                    function(data)
+                    {
+                        $('#fromAjax').html(data);  //Update here with the response
+                    }
+                );
+            } 
+            );
+              
+        }
+        function successFire(pos) {
+              crd = pos.coords;
+              tes = pos.coords.latitude ;
+              lat = `Latitude : ${crd.latitude}`;
+              var note = prompt("Please enter a note to attach ", "note");
+              
+              $.post(                             //call the server
+                "/getNearest.php",                     //At this url
+                {
+                    type:"fire",
+                    latitude: tes ,
+                    longitude: pos.coords.longitude 
+                }                               //And send this data to it
+            ).done(                             //And when it's done
+                function(data)
+                {
+                    policeId = data;
+                    //Update here with the response
+                }
+            ).then( function( data ) {
+              
+              $.post(                             //call the server
+                "/test.php",                     //At this url
+                {
+                    userid: document.getElementById("userid").value,
+                    name: document.getElementById("name").value,
+                    surname: document.getElementById("userSurname").value,
+                    UserCellnumber : document.getElementById("UserCellnumber").value,
+                    userAddress: document.getElementById("userAddress").value,
+                    note: note,
+                    policeid: data,
+                    latitude: tes ,
+                    longitude: pos.coords.longitude ,
+                    username: document.getElementById("usernamHolder").innerHTML,
+                    Type: "fire"
+                }                               //And send this data to it
+            ).done(                             //And when it's done
+                function(data)
+                {
+                    $('#fromAjax').html(data);  //Update here with the response
+                }
+            );
+            }
+            );
+        }
+        function test()
+        {
+            navigator.geolocation.getCurrentPosition(successPolice); 
+            
+        }
+        function PoliceCall()
+        {
+            navigator.geolocation.getCurrentPosition(successPolice); 
+            
+        }
+        function AmbulanceCall()
+        {
+            navigator.geolocation.getCurrentPosition(successAmbulane); 
+            
+        }
+        function FireCall()
+        {
+            navigator.geolocation.getCurrentPosition(successFire); 
+            
+        }
+        function goToIndex()
+        {
+            var url_string = window.location.href;
+            var url = new URL(url_string);
+            var userId = url.searchParams.get("username");
+            var parm = "username="+userId;
+            window.location.href = "/adminhomepage.html?"+parm;
+        }
+        
+        function goToRequest()
+        {
+            var url_string = window.location.href;
+            var url = new URL(url_string);
+            var userId = url.searchParams.get("username");
+            var parm = "username="+userId;
+            window.location.href = "/sendAppointmentRequests.html?"+parm;
+        }
+        function goToManage()
+        {
+            var url_string = window.location.href;
+            var url = new URL(url_string);
+            var userId = url.searchParams.get("username");
+            var parm = "username="+userId;
+            window.location.href = "/mangeusers.html?"+parm;
+        }
+        //mangeusers.html
+    </script>
+    
+</head>
+<body class="crm_body_bg" onload ="getUSerDetails()">
+    
+
+
+<!-- main content part here -->
+ 
+ <!-- sidebar  -->
+ <!-- sidebar part here -->
+<nav class="sidebar">
+    <div class="logo d-flex justify-content-between">
+        <a href="index.html"><img src="img/medicall.jpg" alt=""></a>
+        <div class="sidebar_close_icon d-lg-none">
+            <i class="ti-close"></i>
+        </div>
+    </div>
+    <ul id="sidebar_menu">
+       <!-- <li class="side_menu_title">
+            <span>Menu</span>
+          </li>-->
+        <li class="mm-active">
+          <a class="has-arrow"  href="#"  aria-expanded="false">
+          <!-- <i class="fas fa-th"></i> -->
+          <img src="img/menu-icon/1.svg" alt="">
+            <span>Menu</span>
+          </a>
+          <ul>
+            <li><a class="active" href="#" onclick="goToIndex()">Dashboard</a></li>
+            <li><a href="#" onclick="" data-toggle="modal" data-target="#myModal">Add Emergency User</a></li>
+            <li><a href="#" onclick="goToManage()">Manange Users</a></li>
+          </ul>
+
+        </li>
+      </ul>
+    
+</nav>
+<!-- sidebar part end -->
+ <!--/ sidebar  -->
+
+
+<section class="main_content dashboard_part">
+        <!-- menu  -->
+    <div class="container-fluid no-gutters">
+        <div class="row">
+            <div class="col-lg-12 p-0">
+                <div class="header_iner d-flex justify-content-between align-items-center">
+                    <div class="sidebar_icon d-lg-none">
+                        <i class="ti-menu"></i>
+                    </div>
+                    <div class="serach_field-area">
+                            <div class="search_inner">
+                                <form action="#">
+                                    <div class="search_field">
+                                        <input type="text" placeholder="Search here..." >
+                                    </div>
+                                    <button type="submit"> <img src="img/icon/icon_search.svg" alt=""> </button>
+                                </form>
+                            </div>
+                        </div>
+                    <div class="header_right d-flex justify-content-between align-items-center">
+                        <div class="header_notification_warp d-flex align-items-center">
+                            <li>
+                                <a href="#"> <img src="img/icon/bell.svg" alt=""> </a>
+                            </li>
+                            <li>
+                                <a href="#"> <img src="img/icon/msg.svg" alt=""> </a>
+                            </li>
+                        </div>
+                        <div class="profile_info">
+                            <img src="img/logo.jpg" alt="#">
+                            <div class="profile_info_iner">
+                                <p id= "fullname" ></p>
+                                <h5 id="usernamHolder"></h5>
+                                <div class="profile_info_details">
+                                    <!--<a href="#" onclick="goToupdate()">My Profile <i class="ti-user"></i></a>
+                                    <a href="#">Settings <i class="ti-settings"></i></a>-->
+                                    <a href="/login.html">Log Out <i class="ti-shift-left"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--/ menu  -->
+    <div class="main_content_iner ">
+        <div class="container-fluid p-0">
+            <div class="row justify-content-center">
+                <div class="col-lg-12">
+                    <div class="single_element">
+                        <div class="quick_activity">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="quick_activity_wrap">
+                                        
+                                        <!-- Modal -->
+                                        <div id="myModal" class="modal fade" role="dialog">
+                                          <div class="modal-dialog">
+                                        
+                                            <!-- Modal content-->
+                                            <div class="modal-content">
+                                              <div class="modal-header">
+                                                  <h4 class="modal-title">Add Emergency User</h4>
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                
+                                              </div>
+                                              <div class="modal-body">
+                                                
+                                                <form>
+                                                    <div class="form-group">
+                                                        <input id="userid" type="hidden" class="form-control" placeholder="userId" >
+                                                    </div>
+                                                    <p>Institute name</p>
+                                                    <div class="form-group">
+                                                        <input id="instNAme" type="text" class="form-control" placeholder="Institute Name">
+                                                    </div>
+                                                    <p>Username</p>
+                                                    <div class="form-group">
+                                                        <input id="newUsername" type="text" class="form-control" placeholder="Login Username" >
+                                                    </div>
+                                                    <p>Password</p>
+                                                    <div class="form-group">
+                                                        <input id="newPassword" type="password" class="form-control" placeholder="Login Password">
+                                                    </div>
+                                                    
+                                                    <p>Institute Address</p>
+                                                    <div class="form-group">
+                                                        <input id="InstAddress" type="text" class="form-control" placeholder="Institute Address">
+                                                    </div>
+                                                    <p>Institute latitude</p>
+                                                    <div class="form-group">
+                                                        <input id="InstLat" type="text" class="form-control" placeholder="Institute latitude">
+                                                    </div>
+                                                    <p>Institute Longitude</p>
+                                                    <div class="form-group">
+                                                        <input id="InstLong" type="text" class="form-control" placeholder="Institute Longitude">
+                                                    </div>
+
+                                                    <p>Institute Type</p>
+                                                    <div class="form-group">
+                                                        <select id="InstType" class="form-control form-control-sm">
+                                                            <option value="">Select Type</option>
+                                                            <option value="USER_POLICE">Police</option>
+                                                            <option value="USER_FIRE">Fire Derpartment</option>
+                                                            <option value="USER_AMBULANCE">Ambulance</option>
+                                                            <option value="USER_DOCTOR">DOCTOR</option>
+                                                            
+                                                            <option value="USER_MEDICENTER">Medical Center</option>
+                                                        </select>
+                                                        
+                                                    </div>
+                                                    
+                                                </form>
+                                              </div>
+                                              <div class="modal-footer">
+                                                  <button type="button" class="btn btn-success" data-dismiss="modal" onclick="createUser()" >Create User</button>
+                                                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="geocodeLatLng()">Close</button>
+                                              </div>
+                                            </div>
+                                        
+                                          </div>
+                                        </div>
+    
+                                       <!-- <a href="#" data-toggle="modal" data-target="#myModal" >
+                                        <div class="single_quick_activity d-flex">
+                                        
+                                            <div class="icon">
+                                                <img src="img/icon/medicenter.jpg" alt="">
+                                            </div>
+                                            <div class="count_content">
+                                                <h3><span class="counter">520</span> </h3>
+                                                 <p id="demo" >Medi Center</p> 
+                                            </div>
+                                        
+                                        </div>
+                                        </a> -->
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Commented Code Dont delet-->
+                <!--
+                <div class="col-lg-12 col-xl-12">
+                    <div class="white_box mb_30 ">
+                        <div class="box_header border_bottom_1px  ">
+                            <div class="main-title">
+                                <h3 class="mb_25" >Hospital Survey</h3>
+                            </div>
+                        </div>
+                        <div class="income_servay">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="count_content">
+                                        <h3>$ <span class="counter">305</span> </h3>
+                                        <p>Today's Income</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="count_content">
+                                        <h3>$ <span class="counter">1005</span> </h3>
+                                        <p>This Week's Income</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="count_content">
+                                        <h3>$ <span class="counter">5505</span> </h3>
+                                        <p>This Month's Income</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="count_content">
+                                        <h3>$ <span class="counter">155615</span> </h3>
+                                        <p>This Year's Income</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="bar_wev"></div>
+                    </div>
+                </div>
+                <div class="col-xl-7">
+                    <div class="white_box QA_section card_height_100">
+                        <div class="white_box_tittle list_header m-0 align-items-center">
+                            <div class="main-title mb-sm-15">
+                                <h3 class="m-0 nowrap">Patients</h3>
+                            </div>
+                            <div class="box_right d-flex lms_block">
+                                <div class="serach_field-area2">
+                                    <div class="search_inner">
+                                        <form Active="#">
+                                            <div class="search_field">
+                                                <input type="text" placeholder="Search here...">
+                                            </div>
+                                            <button type="submit"> <i class="ti-search"></i> </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="QA_table ">
+                            
+                            <table class="table lms_table_active2">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Patients Name</th>
+                                        <th scope="col">department</th>
+                                        <th scope="col">Appointment Date</th>
+                                        <th scope="col">Serial Number</th>
+                                        <th scope="col">Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">
+                                            <div class="patient_thumb d-flex align-items-center">
+                                                <div class="student_list_img mr_20">
+                                                    <img src="img/patient/pataint.png" alt="" srcset="">
+                                                </div>
+                                                <p>Jhon Kural</p>
+                                            </div>
+                                        </th>
+                                        <td>Monte Carlo</td>
+                                        <td>11/03/2020</td>
+                                        <td>MDC65454</td>
+                                        <td>
+                                            <div class="amoutn_action d-flex align-items-center">
+                                                $29,192
+                                                <div class="dropdown ml-4">
+                                                    <a class=" dropdown-toggle hide_pils" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        <i class="fas fa-ellipsis-v"></i>
+                                                    </a>
+                                                  
+                                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                                                      <a class="dropdown-item" href="#">View</a>
+                                                      <a class="dropdown-item" href="#">Edit</a>
+                                                      <a class="dropdown-item" href="#">Delete</a>
+                                                    </div>
+                                                  </div>
+                                            </div> </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">
+                                            <div class="patient_thumb d-flex align-items-center">
+                                                <div class="student_list_img mr_20">
+                                                    <img src="img/patient/2.png" alt="" srcset="">
+                                                </div>
+                                                <p>Jhon Kural</p>
+                                            </div>
+                                        </th>
+                                        <td>Monte Carlo</td>
+                                        <td>11/03/2020</td>
+                                        <td>MDC65454</td>
+                                        <td>
+                                            <div class="amoutn_action d-flex align-items-center">
+                                                $29,192
+                                                <div class="dropdown ml-4">
+                                                    <a class=" dropdown-toggle hide_pils" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        <i class="fas fa-ellipsis-v"></i>
+                                                    </a>
+                                                  
+                                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                                                      <a class="dropdown-item" href="#">View</a>
+                                                      <a class="dropdown-item" href="#">Edit</a>
+                                                      <a class="dropdown-item" href="#">Delete</a>
+                                                    </div>
+                                                  </div>
+                                            </div> </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">
+                                            <div class="patient_thumb d-flex align-items-center">
+                                                <div class="student_list_img mr_20">
+                                                    <img src="img/patient/3.png" alt="" srcset="">
+                                                </div>
+                                                <p>Jhon Kural</p>
+                                            </div>
+                                        </th>
+                                        <td>Monte Carlo</td>
+                                        <td>11/03/2020</td>
+                                        <td>MDC65454</td>
+                                        <td>
+                                            <div class="amoutn_action d-flex align-items-center">
+                                                $29,192
+                                                <div class="dropdown ml-4">
+                                                    <a class=" dropdown-toggle hide_pils" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        <i class="fas fa-ellipsis-v"></i>
+                                                    </a>
+                                                  
+                                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                                                      <a class="dropdown-item" href="#">View</a>
+                                                      <a class="dropdown-item" href="#">Edit</a>
+                                                      <a class="dropdown-item" href="#">Delete</a>
+                                                    </div>
+                                                  </div>
+                                            </div> </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">
+                                            <div class="patient_thumb d-flex align-items-center">
+                                                <div class="student_list_img mr_20">
+                                                    <img src="img/patient/4.png" alt="" srcset="">
+                                                </div>
+                                                <p>Jhon Kural</p>
+                                            </div>
+                                        </th>
+                                        <td>Monte Carlo</td>
+                                        <td>11/03/2020</td>
+                                        <td>MDC65454</td>
+                                        <td>
+                                            <div class="amoutn_action d-flex align-items-center">
+                                                $29,192
+                                                <div class="dropdown ml-4">
+                                                    <a class=" dropdown-toggle hide_pils" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        <i class="fas fa-ellipsis-v"></i>
+                                                    </a>
+                                                  
+                                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                                                      <a class="dropdown-item" href="#">View</a>
+                                                      <a class="dropdown-item" href="#">Edit</a>
+                                                      <a class="dropdown-item" href="#">Delete</a>
+                                                    </div>
+                                                  </div>
+                                            </div> </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">
+                                            <div class="patient_thumb d-flex align-items-center">
+                                                <div class="student_list_img mr_20">
+                                                    <img src="img/patient/5.png" alt="" srcset="">
+                                                </div>
+                                                <p>Jhon Kural</p>
+                                            </div>
+                                        </th>
+                                        <td>Monte Carlo</td>
+                                        <td>11/03/2020</td>
+                                        <td>MDC65454</td>
+                                        <td>
+                                            <div class="amoutn_action d-flex align-items-center">
+                                                $29,192
+                                                <div class="dropdown ml-4">
+                                                    <a class=" dropdown-toggle hide_pils" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        <i class="fas fa-ellipsis-v"></i>
+                                                    </a>
+                                                  
+                                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                                                      <a class="dropdown-item" href="#">View</a>
+                                                      <a class="dropdown-item" href="#">Edit</a>
+                                                      <a class="dropdown-item" href="#">Delete</a>
+                                                    </div>
+                                                  </div>
+                                            </div> </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">
+                                            <div class="patient_thumb d-flex align-items-center">
+                                                <div class="student_list_img mr_20">
+                                                    <img src="img/patient/6.png" alt="" srcset="">
+                                                </div>
+                                                <p>Jhon Kural</p>
+                                            </div>
+                                        </th>
+                                        <td>Monte Carlo</td>
+                                        <td>11/03/2020</td>
+                                        <td>MDC65454</td>
+                                        <td>
+                                            <div class="amoutn_action d-flex align-items-center">
+                                                $29,192
+                                                <div class="dropdown ml-4">
+                                                    <a class=" dropdown-toggle hide_pils" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        <i class="fas fa-ellipsis-v"></i>
+                                                    </a>
+                                                  
+                                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                                                      <a class="dropdown-item" href="#">View</a>
+                                                      <a class="dropdown-item" href="#">Edit</a>
+                                                      <a class="dropdown-item" href="#">Delete</a>
+                                                    </div>
+                                                  </div>
+                                            </div> </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">
+                                            <div class="patient_thumb d-flex align-items-center">
+                                                <div class="student_list_img mr_20">
+                                                    <img src="img/patient/6.png" alt="" srcset="">
+                                                </div>
+                                                <p>Jhon Kural</p>
+                                            </div>
+                                        </th>
+                                        <td>Monte Carlo</td>
+                                        <td>11/03/2020</td>
+                                        <td>MDC65454</td>
+                                        <td>
+                                            <div class="amoutn_action d-flex align-items-center">
+                                                $29,192
+                                                <div class="dropdown ml-4">
+                                                    <a class=" dropdown-toggle hide_pils" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        <i class="fas fa-ellipsis-v"></i>
+                                                    </a>
+                                                  
+                                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                                                      <a class="dropdown-item" href="#">View</a>
+                                                      <a class="dropdown-item" href="#">Edit</a>
+                                                      <a class="dropdown-item" href="#">Delete</a>
+                                                    </div>
+                                                  </div>
+                                            </div> </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-5 ">
+                    <div class="white_box card_height_50 mb_30">
+                        <div class="box_header border_bottom_1px  ">
+                            <div class="main-title">
+                                <h3 class="mb_25">Total Recover Report</h3>
+                            </div>
+                        </div>
+                        <div id="chart-7"></div>
+                        <div class="row text-center mt-3">
+                            <div class="col-sm-6">
+                                <h6 class="heading_6 d-block">Last Month</h6>
+                                <p class="m-0">358</p>
+                            </div>
+                            <div class="col-sm-6">
+                                <h6 class="heading_6 d-block">Current Month</h6>
+                                <p class="m-0">194</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="white_box card_height_50 mb_30">
+                        <div class="box_header border_bottom_1px  ">
+                            <div class="main-title">
+                                <h3 class="mb_25">Total Death Report</h3>
+                            </div>
+                        </div>
+                        <div id="chart-8"></div>
+                        <div class="row text-center mt-3">
+                            <div class="col-sm-6">
+                                <h6 class="heading_6 d-block">Last Month</h6>
+                                <p class="m-0">358</p>
+                            </div>
+                            <div class="col-sm-6">
+                                <h6 class="heading_6 d-block">Current Month</h6>
+                                <p class="m-0">194</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-xl-12">
+                    <div class="white_box card_height_100">
+                        <div class="box_header border_bottom_1px  ">
+                            <div class="main-title">
+                                <h3 class="mb_25">Hospital Staff</h3>
+                            </div>
+                        </div>
+                        <div class="staf_list_wrapper sraf_active owl-carousel">
+                           
+                            <div class="single_staf">
+                                <div class="staf_thumb">
+                                    <img src="img/staf/1.png" alt="">
+                                </div>
+                                <h4>Dr. Sysla J Smith</h4>
+                                <p>Doctor</p>
+                            </div>
+                            
+                            <div class="single_staf">
+                                <div class="staf_thumb">
+                                    <img src="img/staf/2.png" alt="">
+                                </div>
+                                <h4>Dr. Sysla J Smith</h4>
+                                <p>Doctor</p>
+                            </div>
+                           
+                            <div class="single_staf">
+                                <div class="staf_thumb">
+                                    <img src="img/staf/3.png" alt="">
+                                </div>
+                                <h4>Dr. Sysla J Smith</h4>
+                                <p>Doctor</p>
+                            </div>
+                            
+                            <div class="single_staf">
+                                <div class="staf_thumb">
+                                    <img src="img/staf/4.png" alt="">
+                                </div>
+                                <h4>Dr. Sysla J Smith</h4>
+                                <p>Doctor</p>
+                            </div>
+                            
+                            <div class="single_staf">
+                                <div class="staf_thumb">
+                                    <img src="img/staf/5.png" alt="">
+                                </div>
+                                <h4>Dr. Sysla J Smith</h4>
+                                <p>Doctor</p>
+                            </div>
+                            
+                            <div class="single_staf">
+                                <div class="staf_thumb">
+                                    <img src="img/staf/1.png" alt="">
+                                </div>
+                                <h4>Dr. Sysla J Smith</h4>
+                                <p>Doctor</p>
+                            </div>
+                            
+                            <div class="single_staf">
+                                <div class="staf_thumb">
+                                    <img src="img/staf/2.png" alt="">
+                                </div>
+                                <h4>Dr. Sysla J Smith</h4>
+                                <p>Doctor</p>
+                            </div>
+                            
+                            <div class="single_staf">
+                                <div class="staf_thumb">
+                                    <img src="img/staf/3.png" alt="">
+                                </div>
+                                <h4>Dr. Sysla J Smith</h4>
+                                <p>Doctor</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-6">
+                    <div class="white_box card_height_100">
+                        <div class="box_header border_bottom_1px  ">
+                            <div class="main-title">
+                                <h3 class="mb_25">Recent Activity</h3>
+                            </div>
+                        </div>
+                        <div class="Activity_timeline">
+                            <ul>
+                                <li>
+                                    <div class="activity_bell"></div>
+                                    <div class="activity_wrap">
+                                        <h6>5 min ago</h6>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque scelerisque
+                                        </p>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="activity_bell"></div>
+                                    <div class="activity_wrap">
+                                        <h6>5 min ago</h6>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque scelerisque
+                                        </p>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="activity_bell"></div>
+                                    <div class="activity_wrap">
+                                        <h6>5 min ago</h6>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque scelerisque
+                                        </p>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="activity_bell"></div>
+                                    <div class="activity_wrap">
+                                        <h6>5 min ago</h6>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque scelerisque
+                                        </p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-6">
+                    <div class="white_box mb_30">
+                        <div class="box_header border_bottom_1px  ">
+                            <div class="main-title">
+                                <h3 class="mb_25">Recent Activity</h3>
+                            </div>
+                        </div>
+                        <div class="activity_progressbar">
+                            <div class="single_progressbar">
+                                <h6>USA</h6>
+                                <div id="bar1" class="barfiller">
+                                    <div class="tipWrap">
+                                        <span class="tip"></span>
+                                    </div>
+                                    <span class="fill" data-percentage="95"></span>
+                                </div>
+                            </div>
+                            <div class="single_progressbar">
+                                <h6>AFRICA</h6>
+                                <div id="bar2" class="barfiller">
+                                    <div class="tipWrap">
+                                        <span class="tip"></span>
+                                    </div>
+                                    <span class="fill" data-percentage="75"></span>
+                                </div>
+                            </div>
+                            <div class="single_progressbar">
+                                <h6>UK</h6>
+                                <div id="bar3" class="barfiller">
+                                    <div class="tipWrap">
+                                        <span class="tip"></span>
+                                    </div>
+                                    <span class="fill" data-percentage="55"></span>
+                                </div>
+                            </div>
+                            <div class="single_progressbar">
+                                <h6>CANADA</h6>
+                                <div id="bar4" class="barfiller">
+                                    <div class="tipWrap">
+                                        <span class="tip"></span>
+                                    </div>
+                                    <span class="fill" data-percentage="25"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                -->
+            </div>
+        </div>
+    </div>
+    <div class="modal-body">
+        <form>
+            <div class="form-group">
+                <input id="userid" type="hidden" class="form-control" placeholder="userId" >
+            </div>
+            <div class="form-group">
+                <input id="name" type="hidden" class="form-control" placeholder="Name" >
+            </div>
+            <div class="form-group">
+                <input id="userSurname" type="hidden" class="form-control" placeholder="Lastname">
+            </div>
+            <div class="form-group">
+                <input id="userIdNumber" type="hidden" class="form-control" placeholder="ID Number/Passport">
+            </div>
+            <div class="form-group">
+                <input id="userAddress" type="hidden" class="form-control" placeholder="Home Adress">
+            </div>
+            <div class="form-group">
+                <input id="userMedicalAidName" type="hidden" class="form-control" placeholder="Medical Aid Name">
+            </div>
+            <div class="form-group">
+                <input id="MedicalAidNumber" type="hidden" class="form-control" placeholder="Medical Aid Number">
+            </div>
+            <div class="form-group">
+                <input id="MedicalAidConatct" type="hidden" class="form-control" placeholder="Medical Aid Conatct">
+            </div>
+            <div class="form-group">
+                <input id="UserCellnumber" type="hidden" class="form-control" placeholder="Medical Aid Number">
+            </div>
+            
+        </form>
+    </div>
+
+<!-- footer part -->
+<div class="footer_part">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="footer_iner text-center">
+                    <p>2020 © Influence - Designed by <a href="#"> <i class="ti-heart"></i> </a><a href="#"> Samkelo Zuma</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+<!-- main content part end -->
+
+<!-- footer  -->
+<!-- jquery slim -->
+<script src="js/jquery-3.4.1.min.js"></script>
+<!-- popper js -->
+<script src="js/popper.min.js"></script>
+<!-- bootstarp js -->
+<script src="js/bootstrap.min.js"></script>
+<!-- sidebar menu  -->
+<script src="js/metisMenu.js"></script>
+<!-- waypoints js -->
+<script src="vendors/count_up/jquery.waypoints.min.js"></script>
+<!-- waypoints js -->
+<script src="vendors/chartlist/Chart.min.js"></script>
+<!-- counterup js -->
+<script src="vendors/count_up/jquery.counterup.min.js"></script>
+<!-- swiper slider js -->
+<script src="vendors/swiper_slider/js/swiper.min.js"></script>
+<!-- nice select -->
+<script src="vendors/niceselect/js/jquery.nice-select.min.js"></script>
+<!-- owl carousel -->
+<script src="vendors/owl_carousel/js/owl.carousel.min.js"></script>
+<!-- gijgo css -->
+<script src="vendors/gijgo/gijgo.min.js"></script>
+<!-- responsive table -->
+<script src="vendors/datatable/js/jquery.dataTables.min.js"></script>
+<script src="vendors/datatable/js/dataTables.responsive.min.js"></script>
+<script src="vendors/datatable/js/dataTables.buttons.min.js"></script>
+<script src="vendors/datatable/js/buttons.flash.min.js"></script>
+<script src="vendors/datatable/js/jszip.min.js"></script>
+<script src="vendors/datatable/js/pdfmake.min.js"></script>
+<script src="vendors/datatable/js/vfs_fonts.js"></script>
+<script src="vendors/datatable/js/buttons.html5.min.js"></script>
+<script src="vendors/datatable/js/buttons.print.min.js"></script>
+
+<script src="js/chart.min.js"></script>
+<!-- progressbar js -->
+<script src="vendors/progressbar/jquery.barfiller.js"></script>
+<!-- tag input -->
+<script src="vendors/tagsinput/tagsinput.js"></script>
+<!-- text editor js -->
+<script src="vendors/text_editor/summernote-bs4.js"></script>
+
+<script src="vendors/apex_chart/apexcharts.js"></script>
+
+<!-- custom js -->
+<script src="js/custom.js"></script>
+
+<script src="vendors/apex_chart/bar_active_1.js"></script>
+<script src="vendors/apex_chart/apex_chart_list.js"></script>
+<script src="dist/attention.js"></script>
+</body>
+
+<!-- Mirrored from demo.dashboardpack.com/hospital-html/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 20 Apr 2021 10:56:19 GMT -->
+</html>
