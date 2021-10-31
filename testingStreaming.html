@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/stylesheet.css">
+    <title>Logged in</title>
+    <script>
+        /*function doupload(file) {
+            
+            //var file_data = $(file).prop("files")[0];   // Getting the properties of file from file field
+            alert("Uploading ");
+            var form_data = new FormData();                  // Creating object of FormData class
+            form_data.append("file", file)              // Appending parameter named file with properties of file_field to form_data
+            form_data.append("user_id", 123)                 // Adding extra parameters to form_data
+            form_data.append("infilename", "filename")                 // Adding extra parameters to form_data
+            $.ajax({
+                        url: "/upload.php",
+                        dataType: 'script',
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        data: form_data,                         // Setting the data attribute of ajax with file_data
+                        type: 'post'
+               });
+            /*
+            $.post(                             //call the server
+                    "http://xfinity.co.za/updateDoc.php",                     //At this url
+                    {
+                        user_id: user_id,
+                        filename: filename,
+                        filetype:filetype
+                    }                               //And send this data to it
+                ).done(                             //And when it's done
+                    function(data)
+                    {
+                        if(data.localeCompare("user created") != 0)
+                        {
+                            //window.location.href = "./login.html";
+                        }
+                        $('#fromAjax').html(data);  //Update here with the response
+                    }
+                );
+        }*/
+        function cli()
+        {
+            video = document.getElementById('video');
+            // Get access to the camera!
+            if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                // Not adding `{ audio: true }` since we only want video now
+                //alert("inside " + navigator.mediaDevices.getUserMedia({ video: true , audio: true }).then());
+                var vid = navigator.mediaDevices.getUserMedia({ video: true , audio: true });
+                vid.then(
+                    function (stream)
+                    {
+                        video.srcObject = stream;
+                        video.play();
+                        
+                        startRecording(stream,15000);
+                        //var mediaRecorder = new MediaRecorder(stream);
+                        //mediaRecorder.start();
+                        //visualize(stream);
+                        //startRecording(stream,5000);
+                    });
+                
+            }
+            else
+            {
+                alert("false");
+            }
+        }
+        function startRecording(stream, lengthInMS) {
+          let recorder = new MediaRecorder(stream);
+          let data = [];
+            alert("In")
+          //recorder.ondataavailable = event => data.push(event.data);
+           function doupload(file) 
+           { 
+               alert("uploading ");
+           }
+          function makeXMLHttpRequest(url, data, callback) {
+                var request = new XMLHttpRequest();
+                request.onreadystatechange = function() {
+                    if (request.readyState == 4 && request.status == 200) {
+                        callback('upload-ended');
+                    }
+                };
+
+                request.upload.onloadstart = function() {
+                    callback('Upload started...');
+                };
+
+                request.upload.onprogress = function(event) {
+                    callback('Upload Progress ' + Math.round(event.loaded / event.total * 100) + "%");
+                };
+
+                request.upload.onload = function() {
+                    callback('progress-about-to-end');
+                };
+
+                request.upload.onload = function() {
+                    callback('progress-ended');
+                };
+
+                request.upload.onerror = function(error) {
+                    callback('Failed to upload to server');
+                    console.error('XMLHttpRequest failed', error);
+                };
+
+                request.upload.onabort = function(error) {
+                    callback('Upload aborted.');
+                    console.error('XMLHttpRequest aborted', error);
+                };
+
+                request.open('POST', url);
+                request.send(data);
+            }
+          function download() {
+              var blob = new Blob(data, {
+                type: "video/webm"
+              });
+              var url = URL.createObjectURL(blob);
+              var a = document.createElement("a");
+              a.innerHTML = "test";
+              document.body.appendChild(a);
+              a.style = "display: block";
+              alert("url " + url);
+              a.href = url;
+              a.download = "test.webm";
+              //a.click();
+              link = document.getElementById('lnk');
+              //link.href = url;
+              //link.download = "download.webm";
+              alert("downloading " + blob.type);
+              
+              var fileType = blob.type.split('/')[0] || 'audio';
+                var fileName = (Math.random() * 1000).toString().replace('.', '');
+
+                if (fileType === 'audio') {
+                    fileName += '.' + (!!navigator.mozGetUserMedia ? 'ogg' : 'wav');
+                } else {
+                    fileName += '.webm';
+                }
+                alert(fileName);
+                // create FormData
+                var formData = new FormData();
+                formData.append(fileType + '-filename', fileName);
+                formData.append(fileType + '-blob', blob);
+                alert(formData);
+                log('Uploading ' + fileType + ' recording to server.');
+
+                // var upload_url = 'https://your-domain.com/files-uploader/';
+                var upload_url = './save.php';
+
+                // var upload_directory = upload_url;
+                var upload_directory = './uploads/';
+                
+               alert("done");
+                makeXMLHttpRequest(upload_url, formData, function(progress) {
+                    if (progress !== 'upload-ended') {
+                        alert(progress);
+                        return;
+                    }
+                    else
+                    {
+                        alert(progress);
+                    }
+
+                    log('ended', upload_directory + fileName);
+
+                    // to make sure we can delete as soon as visitor leaves
+                    //listOfFilesUploaded.push(upload_directory + fileName);
+                });
+              //var myFile = new File(link.download);
+              var lnk = url.split(":")[1] + ":" + url.split(":")[2];
+              link.href = url;
+              alert(url);
+              doupload(myFile);
+              window.URL.revokeObjectURL(url);
+            }
+          recorder.ondataavailable = function(event)
+          {
+              //var st = new Response(event.data.stream(), { headers: { "Content-Type": "text/html" } }).text();
+              //log(st);
+              //alert(event.data.stream());
+              data.push(event.data);
+              log(data);
+              download();
+          }
+          recorder.onerror = function (e)
+          {
+              log(e);
+          }
+          recorder.start();
+          log(recorder.state + " for " + (lengthInMS/1000) + " seconds...");
+            
+          log("l,");
+          let stopped = new Promise((resolve, reject) => {
+            recorder.onstop = resolve;
+            recorder.onerror = event => reject(event.name);
+          });
+        
+          let recorded = setTimeout(function(){ recorder.state = "recording"; recorder.stop(); log("Stop");},lengthInMS);
+          recorder.onstop = function(event)
+          {
+              alert("Recorder Stopped " + recorder.state);
+              //video2 = document.getElementById('video2');
+              //link = document.getElementById('lnk');
+              
+              let reader = new FileReader();
+              alert(data);
+              //reader.readAsDataURL(data);
+              //alert(reader);
+              /*reader.onload = function() {
+                  link.href = reader.result; // data url
+                  link.click();
+              };*/
+              //video2.srcObject = recorder.stream;
+              //video2.play();
+              //log(reader.result);
+          }
+          //alert(recorder.requestData());
+          return Promise.all([
+            stopped,
+            recorded
+          ])
+          .then(() => data);
+        }
+        function log(str)
+        {
+            temp = document.getElementById("logT").innerHTML;
+            document.getElementById("logT").innerHTML = temp + "<br />" + str;
+        }
+    </script>
+  </head>
+  <body onload="cli()">
+    HELLO WORLD
+    <video id="video" width="640" height="480" autoplay  style="display:none;" muted></video>
+    <button id="snap" onclick="cli()">Snap Photo</button>
+    <canvas id="canvas" width="640" height="480"></canvas>
+    <video id="video2" width="640" height="480" controls ></video>
+    <input type="file" name="fileMandate" id="fileMandate">
+    <a id="lnk" href="#"> tt </a>
+    <div id="logT">
+        l
+    </div>
+  </body>
+</html>

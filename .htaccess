@@ -1,0 +1,8 @@
+#Alternate default index page
+DirectoryIndex login.html
+RewriteEngine On
+RewriteBase /
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*) /login.html
+

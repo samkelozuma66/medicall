@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Admin Page</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script>
+        function AutoRefresh( t ) {
+               setTimeout("location.reload(true);", t);
+        }
+        function openMessage(row)
+        {
+            //var id = $(this).closest("tr").find('td:eq(1)').text();
+            alert(row.closest("tr").cells[0].innerHTML);
+            msgId = row.closest("tr").cells[0].innerHTML;
+            $.post(                             //call the server
+                "/updateMessage.php",                     //At this url
+                {
+                    msg_id: msgId
+                }                               //And send this data to it
+            ).done(                             //And when it's done
+                function(data)
+                {
+                    alert(data);
+                    location.reload();  
+                           
+                        }
+                    );
+        }
+        function trimChar(string, charToRemove) 
+        {
+            while(string.charAt(0)==charToRemove) {
+                string = string.substring(1);
+            }
+        
+            while(string.charAt(string.length-1)==charToRemove) {
+                string = string.substring(0,string.length-1);
+            }
+        
+            return string;
+        }
+        
+        function correctObject(string, charToRemove,value) 
+        {
+            while(string.charAt(0)==charToRemove) {
+                value = true;
+            }
+        
+            while(string.charAt(string.length-1)==charToRemove) {
+                value = true;
+            }
+        
+            return value;
+        }
+      function loadEmegency()
+      {
+          //document.getElementById("hostingDive").innerHTML = "<a href='#'> Hello Wolrd </a>";
+          //setInterval(function(){ location.reload(); }, 120000);
+          $.post(                             //call the server
+                "/getMessages.php",                     //At this url
+                {
+                    username: "username",
+                    policeid: "1"
+                }                               //And send this data to it
+            ).done(                             //And when it's done
+                function(data)
+                {
+                    var str = trimChar(data,'[');
+                    str = trimChar(str,']');
+                    var myObj = str.split("},{");
+                    //alert(myObj[0] + "}");
+                    messageData = "<table class='table'><thead><tr><th>User from</th><th>Alert</th><th></th></tr></thead><tbody>";
+                    myObj.forEach(function(item) 
+                        {
+                            //my = JSON.parse(item);
+                            if (item.indexOf('}') == -1)
+                            {
+                                item = item + "}";
+                            }
+                            if(item.indexOf('{')) 
+                            {
+                                item = "{" + item  ;
+                            }
+                            my = JSON.parse(item);
+                            if(my.message_status == "message_new")
+                            {
+                                newClass = "info";
+                            }
+                            else
+                            {
+                                newClass = ""
+                            }
+                            //alert(my.message_status) msg_id
+                            messageData = messageData + "<tr class='" + newClass +"'><td style='display:none;'>" + my.msg_id + "</t><td>" + my.user_id_from + "</td><td>" + my.message + "</td><td><a href='#' onclick='openMessage(this)' ><span class='glyphicon glyphicon-envelope'></span></a></td></tr>  ";
+                            
+                           
+                        }
+                    );
+                    messageData = messageData + "</tbody></table>";
+                    
+                    document.getElementById("hostingDive").innerHTML = messageData;
+                    /*document.getElementById("userid").value                  =    myObj.user_id              ;
+                    document.getElementById("name").value                    =    myObj.name                 ;
+            	    document.getElementById("userSurname").value             =    myObj.surname              ;
+            	    document.getElementById("userIdNumber").value            =    myObj.id_number            ;
+            	    document.getElementById("userAddress").value             =    myObj.Address              ;
+            	    document.getElementById("userMedicalAidName").value      =    myObj.Medical_Aid_Name     ;
+            	    document.getElementById("MedicalAidNumber").value        =    myObj.Medical_Aid_Number   ;
+            	    document.getElementById("MedicalAidConatct").value       =    myObj.Medical_Aid_Conatct  ;*/
+                    $('#fromAjax').html(data);  //Update here with the response
+                }
+            );
+      }
+  </script>
+</head>
+<body onload = "JavaScript:AutoRefresh(5000);loadEmegency()">
+    
+    <h5 id="hostingDive" >
+        
+    </h5>
+</body>
+</html>

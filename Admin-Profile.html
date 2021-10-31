@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html>
+<br><br>
+	 <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <!-- themefy CSS -->
+    <link rel="stylesheet" href="vendors/themefy_icon/themify-icons.css" />
+    <!-- swiper slider CSS -->
+    <link rel="stylesheet" href="vendors/swiper_slider/css/swiper.min.css" />
+    <!-- select2 CSS -->
+    <link rel="stylesheet" href="vendors/select2/css/select2.min.css" />
+    <!-- select2 CSS -->
+    <link rel="stylesheet" href="vendors/niceselect/css/nice-select.css" />
+    <!-- owl carousel CSS -->
+    <link rel="stylesheet" href="vendors/owl_carousel/css/owl.carousel.css" />
+    <!-- gijgo css -->
+    <link rel="stylesheet" href="vendors/gijgo/gijgo.min.css" />
+    <!-- font awesome CSS -->
+    <link rel="stylesheet" href="vendors/font_awesome/css/all.min.css" />
+    <link rel="stylesheet" href="vendors/tagsinput/tagsinput.css" />
+    <!-- datatable CSS -->
+    <link rel="stylesheet" href="vendors/datatable/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="vendors/datatable/css/responsive.dataTables.min.css" />
+    <link rel="stylesheet" href="vendors/datatable/css/buttons.dataTables.min.css" />
+    <!-- text editor css -->
+    <link rel="stylesheet" href="vendors/text_editor/summernote-bs4.css" />
+    <!-- morris css -->
+    <link rel="stylesheet" href="vendors/morris/morris.css">
+    <!-- metarial icon css -->
+    <link rel="stylesheet" href="vendors/material_icon/material-icons.css" />
+
+    <!-- menu css  -->
+    <link rel="stylesheet" href="css/metisMenu.css">
+    <!-- style CSS -->
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/colors/default.css" id="colorSkinCSS">
+ <style type="text/css">
+     
+
+   .registration-form{
+      background: #f7f7f7;
+      padding: 20px;
+     
+      margin: 100px 0px;
+    }
+    .err-msg{
+      color:red;
+    }
+    .registration-form form{
+      border: 1px solid #e8e8e8;
+      padding: 10px;
+      background: #f3f3f3;
+    }
+  </style>
+  
+  
+ <!--<script type="text/javascript">
+        function AdminProfile()
+        {
+             var AdminFullName    = document.getElementById("AdminFullName").value ;
+            var AdminEmail    = document.getElementById("AdminEmail").value ;
+            var AdminMobile   = document.getElementById("AdminMobile").value ;
+            var AdminAddress    = document.getElementById("AdminAddress").value ;
+            var AdminPassword = document.getElementById("AdminPassword").value;
+            $.post(                             //call the server
+                "/AdminProfile.php",                     //At this url
+                {
+                    AdminFullName: AdminFullName,
+                    AdminEmail:AdminEmail,
+                    AdminMobile:AdminMobile,
+                    AdminAddress:AdminAddress,
+                    AdminPassword: AdminPassword ,
+                }                               //And send this data to it
+            ).done(                             //And when it's done
+                function(data)
+                {
+                    
+                    var len = data.length;
+                    if ("Incorrect username and/or password!".localeCompare(data) != 0)
+                    {
+                        window.location.href = "/index.html?"+data;
+                    }
+                    
+                    $('#fromAjax').html(data);  //Update here with the response
+                }
+            );
+
+        }
+    </script>-->	
+ <!--<nav class="sidebar" size=100.2>
+    <div class="logo d-flex justify-content-between">
+        <a href="index.html"><img src="img/medicall.jpg" alt="" ></a>
+        </div>
+    </nav>-->
+<!--	<div class="row">
+		<div class="col">
+			<h3>Admin Profile</h3>
+		</div>
+		<div class="col text-right">
+			<a href="AdminProfile.php" class="btn btn-secondary content-link"> View</a>
+		</div>
+	</div>
+<br>-->
+   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script>
+    
+    
+    
+    function trimChar(string, charToRemove) 
+      {
+            while(string.charAt(0)==charToRemove) {
+                string = string.substring(1);
+            }
+        
+            while(string.charAt(string.length-1)==charToRemove) {
+                string = string.substring(0,string.length-1);
+            }
+        
+            return string;
+        }
+    function addRow()
+    { 
+    }
+    function goToupdate()
+        {
+            var url_string = window.location.href;
+            var url = new URL(url_string);
+            var userId = url.searchParams.get("username");
+            var parm = "username="+userId;
+            window.location.href = "/updateUserdeatils.html?"+parm;
+        }
+    
+    function test()//successMedic???
+        {
+            navigator.geolocation.getCurrentPosition(successPolice); 
+            
+        }
+    </script>
+ <nav class="sidebar">
+    <div class="logo d-flex justify-content-between">
+        <a href="index.html"><img src="img/medicall.jpg" alt=""></a>
+        <div class="sidebar_close_icon d-lg-none">
+            <i class="ti-close"></i>
+        </div>
+    </div>
+    </nav>
+<section class="main_content dashboard_part">
+	<div class="col">
+	    	
+		<div class="col">
+			<h3>Admin Profile</h3>
+		</div>
+		
+	<form action="AdminProfile.php" method="post">
+
+            <input type="text" name="AdminFullName" class="form-control" required id="AdminFullName" placeholder="FullName"><br><br>
+
+            <input type="text" name="AdminEmail" class="form-control" required id="AdminEmail" placeholder="Email"><br><br>
+
+            <input type="text" name="AdminMobile" class="form-control"  id="AdminMobile" placeholder="Mobile"><br><br>
+            
+             <input type="text" name="AdminAddress" class="form-control"  id="AdminAddress" placeholder="Address"><br><br>
+             
+              <input type="text" name="AdminPassword" class="form-control"  id="AdminPassword" placeholder="Password"><br><br>
+              
+              <input type="text" name="AdminPassword" class="form-control"  id="AdminPassword"  placeholder="Confirm Password"><br><br>
+
+            <input type="submit" name="insert"  value="Add New">
+             
+
+        </form>
+        <a href="showNewAddedAdmin.html"><input type="submit" name="insert"  value="View Admin Details"></a>
+<!--<?php } elseif (!empty($_GET['view'])) {?>
+	
+	<?php 
+
+    $AdminId= $_GET['view'];
+   $query="SELECT * FROM AdminDetails WHERE AdminId=$AdminId";
+   $res= $conn->query($query);
+   $viewData=$res->fetch_assoc();
+   $backId=$viewData['id']-1;
+   $AdminFullName=$viewData['AdminFullName'];
+   $AdminEmail=$viewData['AdminEmail'];
+   $AdminMobile=$viewData['AdminMobile'];
+   $AdminAddress=$viewData['AdminAddress'];
+   $AdminPassword=$viewData['AdminPassword'];
+   ?>-->
+
+	<div class="col">
+
+</div>
+<br>
+<form action="deleteAdminUser.php" method="get">
+    <p>
+        <label for="AdminId">Delete Admin?:</label>
+        <input type="number" >
+        
+    </p>
+    <input type="submit" value="DELETE Admin">
+    
+    
+</form>
+
+<!--<div class="table-responsive">
+	<table class="table">
+		<tr>
+			<th>Full Name -</th><td></td>
+		</tr>
+		<tr>
+			<th>Email -</th><td>AdminEmail</td>
+		</tr>
+		<tr>
+			<th>Mobile Number -</th><td>AdminMobile</td>
+		</tr>
+		<tr>
+			<th>Address -</th><td>AdminAddress</td>
+		</tr>
+		<tr>
+			<th>Password -</th><td>AdminPassword</td>
+		</tr>
+	</table>
+</div>-->
+ <!--  <?php
+   
+	
+
+ }else {?>-->
+
+
+<!--=================table content start=================-->
+	
+<!--	<div class="row">
+		<div class="col">
+			<h4>Admin Profile</h4>
+		</div>
+		<div class="col text-right">
+			<a href="AdminProfile.php" class="btn btn-secondary content-link"> Add New</a>
+		</div>
+	</div>
+	<br>
+	<div class="row">
+		<div class="col">
+	<div class="table-responsive">
+		<table class="table">
+			<tr>
+				<th>S.N</th>
+				<th>Full Name</th>
+				
+				<th>email</th>
+				<th>Status</th>
+				<th>Edit</th>
+				<th>Delete</th>
+				
+			</tr>
+			</table>
+			</div>
+			</div>
+			</div>
+			<div class="row">
+		<div class="col">
+	<div class="table-responsive">
+		<table class="table">
+			
+   	<tr>
+   		<td>SELECT AdminFullName FROM AdminDetais;</td>
+   		<td></td>
+   		
+   		<td></td>
+   
+   		<td>
+   			
+   		
+   		<!--	<a href="javascript:void(0)" name="admin_profile" class=" text-secondary adminRole"  rel="<?php echo $data['AdminId']; ?>">
+   			<i class='fas fa-user-alt-slash iconRole' ></i>
+   	
+   			<a href="javascript:void(0)" name="admin_profile" class=" text-success adminRole"  rel="">
+              <i class='fas fa-user-alt iconRole'></i>
+   	
+   	
+   		</a></td>
+   		<td><a  href="dashboard.php" class="text-secondary content-link"><i class='far fa-eye'></i></a></td>
+        <td><a href="dashboard.php" class="text-success content-link"><i class=' far fa-edit'></i></a></td>
+        <td><a href="javascript:void(0)" class="text-danger delete"  name="admin_profile" id="<?php echo $data['AdminId']; ?>"><i class='far fa-trash-alt'></i></a></td>
+
+   	</tr>
+   	
+
+
+<tr>
+	<td colspan="6">No Admin Profile Data</td>
+</tr>
+
+			
+		</table>-->
+
+
+
+</div>
+</section>
+	<!---==================table content end===================-->
+
+<script src="js/jquery-3.4.1.min.js"></script>
+<!-- popper js -->
+<script src="js/popper.min.js"></script>
+<!-- bootstarp js -->
+<script src="js/bootstrap.min.js"></script>
+<!-- sidebar menu  -->
+<script src="js/metisMenu.js"></script>
+<!-- waypoints js -->
+<script src="vendors/count_up/jquery.waypoints.min.js"></script>
+<!-- waypoints js -->
+<script src="vendors/chartlist/Chart.min.js"></script>
+<!-- counterup js -->
+<script src="vendors/count_up/jquery.counterup.min.js"></script>
+<!-- swiper slider js -->
+<script src="vendors/swiper_slider/js/swiper.min.js"></script>
+<!-- nice select -->
+<script src="vendors/niceselect/js/jquery.nice-select.min.js"></script>
+<!-- owl carousel -->
+<script src="vendors/owl_carousel/js/owl.carousel.min.js"></script>
+<!-- gijgo css -->
+<script src="vendors/gijgo/gijgo.min.js"></script>
+<!-- responsive table -->
+<script src="vendors/datatable/js/jquery.dataTables.min.js"></script>
+<script src="vendors/datatable/js/dataTables.responsive.min.js"></script>
+<script src="vendors/datatable/js/dataTables.buttons.min.js"></script>
+<script src="vendors/datatable/js/buttons.flash.min.js"></script>
+<script src="vendors/datatable/js/jszip.min.js"></script>
+<script src="vendors/datatable/js/pdfmake.min.js"></script>
+<script src="vendors/datatable/js/vfs_fonts.js"></script>
+<script src="vendors/datatable/js/buttons.html5.min.js"></script>
+<script src="vendors/datatable/js/buttons.print.min.js"></script>
+
+<script src="js/chart.min.js"></script>
+<!-- progressbar js -->
+<script src="vendors/progressbar/jquery.barfiller.js"></script>
+<!-- tag input -->
+<script src="vendors/tagsinput/tagsinput.js"></script>
+<!-- text editor js -->
+<script src="vendors/text_editor/summernote-bs4.js"></script>
+
+<script src="vendors/apex_chart/apexcharts.js"></script>
+
+<!-- custom js -->
+<script src="js/custom.js"></script>
+
+</html>

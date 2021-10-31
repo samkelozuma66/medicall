@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+
+<!-- Mirrored from demo.dashboardpack.com/hospital-html/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 20 Apr 2021 10:54:20 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>ADMIN DASHBOARD</title>
+
+    <link rel="icon" href="img/favicon.jpg" type="image/png"> 
+    <!-- <link rel="icon" href="img/favicon.png" type="image/png"> -->
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <!-- themefy CSS -->
+    <link rel="stylesheet" href="vendors/themefy_icon/themify-icons.css" />
+    <!-- swiper slider CSS -->
+    <link rel="stylesheet" href="vendors/swiper_slider/css/swiper.min.css" />
+    <!-- select2 CSS -->
+    <link rel="stylesheet" href="vendors/select2/css/select2.min.css" />
+    <!-- select2 CSS -->
+    <link rel="stylesheet" href="vendors/niceselect/css/nice-select.css" />
+    <!-- owl carousel CSS -->
+    <link rel="stylesheet" href="vendors/owl_carousel/css/owl.carousel.css" />
+    <!-- gijgo css -->
+    <link rel="stylesheet" href="vendors/gijgo/gijgo.min.css" />
+    <!-- font awesome CSS -->
+    <link rel="stylesheet" href="vendors/font_awesome/css/all.min.css" />
+    <link rel="stylesheet" href="vendors/tagsinput/tagsinput.css" />
+    <!-- datatable CSS -->
+    <link rel="stylesheet" href="vendors/datatable/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="vendors/datatable/css/responsive.dataTables.min.css" />
+    <link rel="stylesheet" href="vendors/datatable/css/buttons.dataTables.min.css" />
+    <!-- text editor css -->
+    <link rel="stylesheet" href="vendors/text_editor/summernote-bs4.css" />
+    <!-- morris css -->
+    <link rel="stylesheet" href="vendors/morris/morris.css">
+    <!-- metarial icon css -->
+    <link rel="stylesheet" href="vendors/material_icon/material-icons.css" />
+    <script type="text/javascript" src="https://cdn.ywxi.net/js/1.js" async></script>
+    <!-- menu css  -->
+    <link rel="stylesheet" href="css/metisMenu.css">
+    <!-- style CSS -->
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/colors/default.css" id="colorSkinCSS">
+    
+    <link href="dist/attention.css" rel="stylesheet">
+    
+    <script type="text/javascript">
+        var crd ;
+        var tes = '';
+        var long = '' ; 
+        function trimChar(string, charToRemove) 
+        {
+            while(string.charAt(0)==charToRemove) {
+                string = string.substring(1);
+            }
+        
+            while(string.charAt(string.length-1)==charToRemove) {
+                string = string.substring(0,string.length-1);
+            }
+        
+            return string;
+        }
+        function rowOnclick(row)
+        {
+            userid = row.closest("tr").cells[0].innerHTML;
+            
+            document.getElementById("userIdHolder").value = userid;
+            document.getElementById("usertypeHolder").value = row.closest("tr").cells[3].innerHTML;
+            document.getElementById("usernameHolder").value = row.closest("tr").cells[1].innerHTML;
+            document.getElementById("userInstNameHolder").value = row.closest("tr").cells[2].innerHTML;
+            
+        }
+        function updateUserStatus(status)
+        {
+            $.post(                             //call the server
+                "/updateUserSatus.php",                     //At this url
+                {
+                    userid:    document.getElementById("userIdHolder").value,
+                    statusid:  status
+                }                               //And send this data to it
+            ).done(                             //And when it's done
+                function(data)
+                {
+                    $('#fromAjax').html(data);  //Update here with the response fullname
+                }
+            ).then(
+                function (data)
+                {
+                    getUSerDetails();
+                }
+                );
+        }
+        function makeMedicalBooking()       {
+            
+            /*$patient_name = mysqli_real_escape_string($con, $_REQUEST['patient_name']);
+        $patient_surname = mysqli_real_escape_string($con, $_REQUEST['patient_surname']);
+        $Patient_number = mysqli_real_escape_string($con, $_REQUEST['patient_number']);
+        $patient_address = mysqli_real_escape_string($con, $_REQUEST['patient_address']);
+        $booking_status = mysqli_real_escape_string($con, $_REQUEST['booking_status']);
+        $MedicalAid_name = mysqli_real_escape_string($con, $_REQUEST['MedicalAid_name']);
+        $MedicalAid_number = mysqli_real_escape_string($con, $_REQUEST['MedicalAid_number']);
+        $_date = mysqli_real_escape_string($con, $_REQUEST['_date']);
+        $_time = mysqli_real_escape_string($con, $_REQUEST['_time']);
+        $booking_number = mysqli_real_escape_string($con, $_REQUEST['booking_number']);*/
+            
+            
+            $.post(                             //call the server
+                "/addMedicalBooking.php",                     //At this url
+                {
+                    patient_name:           document.getElementById("name").value,
+                    patient_surname:        document.getElementById("userSurname").value,
+                    patient_number:         document.getElementById("contactNumber").value,
+                    patient_address:        document.getElementById("userAddress").value,
+                    booking_status:         "pending",
+                    MedicalAid_name:        document.getElementById("MedicalAidName").value,
+                    MedicalAid_number:      document.getElementById("MedicalAidMemNumber").value,
+                    _date:                  document.getElementById("BookingDate").value,
+                    _time:                  document.getElementById("BookingTime").value,
+                    booking_number: ""
+                }                               //And send this data to it
+            ).done(                             //And when it's done
+                function(data)
+                {
+                    var str = trimChar(data,'[');
+                    str = trimChar(str,']');
+                    
+                    alert(data);
+                    $('#fromAjax').html(data);  //Update here with the response fullname
+                }
+            );
+        }
+        function createUser()
+        {
+            //addEmergencyUser.php instNAme
+            var instNAme     = document.getElementById("instNAme").value ;
+            var newUsername  = document.getElementById("newUsername").value ;
+            var newPassword  = document.getElementById("newPassword").value;
+            var InstAddress  = document.getElementById("InstAddress").value;
+            var InstLat      = document.getElementById("InstLat").value;
+            var InstLong     = document.getElementById("InstLong").value;
+            var InstType     = document.getElementById("InstType").value;
+            var docType      = document.getElementById("DoctorType").value;
+            
+            var linkID       = document.getElementById("DoctorCenter").value;
+            
+            $.post(                             //call the server userCellnumber
+                "/addEmergencyUser.php",                     //At this url
+                {
+                    fullname: instNAme,
+                    usertype: InstType,
+                    username: newUsername,
+                    password: newPassword ,
+                    address: InstAddress ,
+                    lat:InstLat,
+                    long:InstLong,
+                    docType:docType,
+                    linkID:linkID
+                }                               //And send this data to it
+            ).done(                             //And when it's done
+                function(data)
+                {
+                    var len = data.length;
+                    alert(data);
+                    $('#fromAjax').html(data);  //Update here with the response*/
+                }
+            ).then(
+                function (data)
+                {
+                    getUSerDetails() 
+                }
+            );
+            
+        }
+        function getEmergencyDetails()
+        {
+                        $.post(                             //call the server
+                "/getEmegerncyDetails.php",                     //At this url
+                {
+                    username: document.getElementById("usernameHolder").value,
+                    usertype: document.getElementById("usertypeHolder").value 
+                }                               //And send this data to it
+            ).done(                             //And when it's done
+                function(data)
+                {
+                    var str = trimChar(data,'[');
+                    str = trimChar(str,']');
+                    var myObj = JSON.parse(str);
+                    document.getElementById("updateinstNAme").value       = myObj.police_name;
+                    document.getElementById("updateInstAddress").value    = myObj.police_address;
+                    document.getElementById("updateInstLat").value        = myObj.address_lat;
+                    document.getElementById("updateInstLong").value       = myObj.address_long;
+                    //Update here with the response
+                });
+        }
+        
+        function updateEmergencyDetails()
+        {
+            $.post(                             //call the server
+                "/updateEmergencyUserDetails.php",                     //At this url
+                {
+                    userid: document.getElementById("userIdHolder").value,
+                    type: document.getElementById("usertypeHolder").value,
+                    name:  document.getElementById("updateinstNAme").value,
+                    adress: document.getElementById("updateInstAddress").value,
+                    lat: document.getElementById("updateInstLat").value,
+                    long: document.getElementById("updateInstLong").value
+                }                               //And send this data to it
+            ).done(                             //And when it's done
+                function(data)
+                {
+                    
+                   /* var str = trimChar(data,'[');
+                    str = trimChar(str,']');
+                    var myObj = JSON.parse(str);
+                    username: document.getElementById("updateinstNAme").value       = myObj.police_name;
+                    username: document.getElementById("updateInstAddress").value    = myObj.police_address;
+                    username: document.getElementById("updateInstLat").value        = myObj.address_lat;
+                    username: document.getElementById("updateInstLong").value       = myObj.address_long;*/
+                    //Update here with the response
+                }
+            ).then(
+                function(data)
+                {
+                    getUSerDetails();
+                }
+                
+                );
+        }
+        
+        function getUSerDetails()       {
+            var url_string = window.location.href;
+            var url = new URL(url_string);
+            var username = url.searchParams.get("username");
+            document.getElementById("usernamHolder").innerHTML = username;
+            
+            $.post(                             //call the server
+                "/getUserDetails.php",                     //At this url
+                {
+                    username: username
+                }                               //And send this data to it
+            ).done(                             //And when it's done
+                function(data)
+                {
+                    var str = trimChar(data,'[');
+                    str = trimChar(str,']');
+                    var myObj = JSON.parse(str);
+                    
+                    document.getElementById("userid").value                  =    myObj.user_id              ;
+                    document.getElementById("name").value                    =    myObj.name                 ;
+            	    document.getElementById("userSurname").value             =    myObj.surname              ;
+            	    document.getElementById("userIdNumber").value            =    myObj.id_number            ;
+            	    document.getElementById("userAddress").value             =    myObj.Address              ;
+            	    document.getElementById("userMedicalAidName").value      =    myObj.Medical_Aid_Name     ;
+            	    document.getElementById("MedicalAidNumber").value        =    myObj.Medical_Aid_Number   ;
+            	    document.getElementById("MedicalAidConatct").value       =    myObj.Medical_Aid_Conatct  ;
+            	    document.getElementById("fullname").innerHTML            =    myObj.name + " " + myObj.surname;
+            	    
+            	    document.getElementById("MedicalAidName").value          =    myObj.Medical_Aid_Name              ;
+            	    document.getElementById("MedicalAidMemNumber").value     =    myObj.Medical_Aid_Number     ;
+            	    document.getElementById("MedicalAidContact").value       =    myObj.Medical_Aid_Conatct   ;
+            	    document.getElementById("memberAddress").value           =    myObj.Address  ;
+            	    document.getElementById("fullname").innerHTML            =    myObj.name + " " + myObj.surname;
+            	    document.getElementById("UserCellnumber").value          =    myObj.User_Cellnumber;
+            	    
+            	    document.getElementById("contactNumber").value          =    myObj.User_Cellnumber;
+            	    
+                    $('#fromAjax').html(data);  //Update here with the response fullname
+                }
+            ).then(
+                function (data)
+                {
+                    
+                    $.post(                             //call the server
+                        "/getEmergencyUsers.php",                     //At this url
+                        {
+                            userid: document.getElementById("userid").value
+                        }                               //And send this data to it
+                    ).done(                             //And when it's done
+                        function(data)
+                        {
+                            var str = trimChar(data,'[');
+                            str = trimChar(str,']');
+                            var myObj = str.split("},{");
+                            //alert(myObj[0] + "}");
+                            //DoctorCenter
+                            DoctorCenter = document.getElementById("DoctorCenter");
+                            var option = document.createElement("option");
+                            option.text  = "select center";
+                            option.value = "";
+                            DoctorCenter.add(option);
+                            
+                            messageData = "<table class='table table-bordered table-dark'><thead><tr><th>User ID</th><th>username</th><th>name</th><th>Type</th><th>Status</th></tr></thead><tbody>";
+                            myObj.forEach(function(item) 
+                                {
+                                    //my = JSON.parse(item);
+                                    if (item.indexOf('}') == -1)
+                                    {
+                                        item = item + "}";
+                                    }
+                                    if(item.indexOf('{')) 
+                                    {
+                                        item = "{" + item  ;
+                                    }
+                                    my = JSON.parse(item);
+                                    if(my.type_id == "USER_MEDICENTER")
+                                    {
+                                        var option = document.createElement("option");
+                                        option.text  = my.name;
+                                        option.value = my.user_id;
+                                        DoctorCenter.add(option);
+                                    }
+                                    //alert(my.message_status) msg_id 
+                                    //<td><a href='#' onclick='openMessage(this)' ><span class='glyphicon glyphicon-envelope'></span></a></td>
+                                    
+                                    messageData = messageData + "<tr class='info' onclick='rowOnclick(this)'><td>" + my.user_id + "</td><td>" + my.username + "</td><td>" + my.name + "</td><td>" + my.type_id + "</td><td>" + my.status_id + "</td></tr>  ";
+                                    
+                                   
+                                }
+                            );
+                            messageData = messageData + "</tbody></table>";
+                            
+                            document.getElementById("hostingDive").innerHTML = messageData;
+                            
+                            $('#fromAjax').html(data);  //Update here with the response
+                        }
+                    );
+                    
+                }
+                
+            );
+        }
+        function goToupdate()
+        {
+            var url_string = window.location.href;
+            var url = new URL(url_string);
+            var userId = url.searchParams.get("username");
+            var parm = "username="+userId;
+            window.location.href = "/updateUserdeatils.html?"+parm;
+        }
+        
+        function successPolice(pos) {
+              crd = pos.coords;
+              tes = pos.coords.latitude ;
+              lat = `Latitude : ${crd.latitude}`;
+              
+              var note = prompt("Please enter a note to attach ", "note");
+              
+              $.post(                             //call the server
+                "/getNearest.php",                     //At this url
+                {
+                    type:"police",
+                    latitude: tes ,
+                    longitude: pos.coords.longitude 
+                }                               //And send this data to it
+            ).done(                             //And when it's done
+                function(data)
+                {
+                    policeId = data;
+                    //Update here with the response
+                }
+            ).then( function( data ) {
+                $.post(                             //call the server
+                "/test.php",                     //At this url
+                {
+                    userid: document.getElementById("userid").value,
+                    name: document.getElementById("name").value,
+                    surname: document.getElementById("userSurname").value,
+                    userAddress: document.getElementById("userAddress").value,
+                    UserCellnumber : document.getElementById("UserCellnumber").value,
+                    policeid: data,
+                    note: note,
+                    latitude: tes ,
+                    longitude: pos.coords.longitude ,
+                    username: document.getElementById("usernamHolder").innerHTML,
+                    Type: "Police"
+                }                               //And send this data to it
+                ).done(                             //And when it's done
+                    function(data)
+                    {
+                        $('#fromAjax').html(data);  //Update here with the response
+                    }
+                );    
+            
+        } );
+            
+            
+        }
+        function successAmbulane(pos) {
+              crd = pos.coords;
+              tes = pos.coords.latitude ;
+              lat = `Latitude : ${crd.latitude}`;
+              var note = prompt("Please enter a note to attach ", "note");
+              
+              $.post(                             //call the server
+                "/getNearest.php",                     //At this url
+                {
+                    type:"ambulance",
+                    latitude: tes ,
+                    longitude: pos.coords.longitude 
+                }                               //And send this data to it
+            ).done(                             //And when it's done
+                function(data)
+                {
+                    policeId = data;
+                    //Update here with the response
+                }
+            ).then( function( data ) {
+              
+                  $.post(                             //call the server
+                    "/test.php",                     //At this url
+                    {
+                        userid: document.getElementById("userid").value,
+                        name: document.getElementById("name").value,
+                        surname: document.getElementById("userSurname").value,
+                        UserCellnumber : document.getElementById("UserCellnumber").value,
+                        userAddress: document.getElementById("userAddress").value,
+                        note: note,
+                        policeid: data,
+                        latitude: tes ,
+                        longitude: pos.coords.longitude ,
+                        username: document.getElementById("usernamHolder").innerHTML,
+                        Type: "ambulace"
+                    }                               //And send this data to it
+                ).done(                             //And when it's done
+                    function(data)
+                    {
+                        $('#fromAjax').html(data);  //Update here with the response
+                    }
+                );
+            } 
+            );
+              
+        }
+        function successFire(pos) {
+              crd = pos.coords;
+              tes = pos.coords.latitude ;
+              lat = `Latitude : ${crd.latitude}`;
+              var note = prompt("Please enter a note to attach ", "note");
+              
+              $.post(                             //call the server
+                "/getNearest.php",                     //At this url
+                {
+                    type:"fire",
+                    latitude: tes ,
+                    longitude: pos.coords.longitude 
+                }                               //And send this data to it
+            ).done(                             //And when it's done
+                function(data)
+                {
+                    policeId = data;
+                    //Update here with the response
+                }
+            ).then( function( data ) {
+              
+              $.post(                             //call the server
+                "/test.php",                     //At this url
+                {
+                    userid: document.getElementById("userid").value,
+                    name: document.getElementById("name").value,
+                    surname: document.getElementById("userSurname").value,
+                    UserCellnumber : document.getElementById("UserCellnumber").value,
+                    userAddress: document.getElementById("userAddress").value,
+                    note: note,
+                    policeid: data,
+                    latitude: tes ,
+                    longitude: pos.coords.longitude ,
+                    username: document.getElementById("usernamHolder").innerHTML,
+                    Type: "fire"
+                }                               //And send this data to it
+            ).done(                             //And when it's done
+                function(data)
+                {
+                    $('#fromAjax').html(data);  //Update here with the response
+                }
+            );
+            }
+            );
+        }
+        function test()
+        {
+            navigator.geolocation.getCurrentPosition(successPolice); 
+            
+        }
+        function PoliceCall()
+        {
+            navigator.geolocation.getCurrentPosition(successPolice); 
+            
+        }
+        function AmbulanceCall()
+        {
+            navigator.geolocation.getCurrentPosition(successAmbulane); 
+            
+        }
+        function FireCall()
+        {
+            navigator.geolocation.getCurrentPosition(successFire); 
+            
+        }
+        function goToIndex()
+        {
+            var url_string = window.location.href;
+            var url = new URL(url_string);
+            var userId = url.searchParams.get("username");
+            var parm = "username="+userId;
+            window.location.href = "/adminhomepage.html?"+parm;
+        }
+        
+        function typeChange(value) 
+        {
+            //alert(value);
+            if(value == "USER_DOCTOR")
+            {
+                docType = document.getElementById("docType");
+                
+                docType.style.display = "block";
+                
+            }
+            else
+            {
+                docType = document.getElementById("docType");
+                
+                docType.style.display = "none";
+            }
+        }
+        
+        function goToRequest()
+        {
+            var url_string = window.location.href;
+            var url = new URL(url_string);
+            var userId = url.searchParams.get("username");
+            var parm = "username="+userId;
+            window.location.href = "/sendAppointmentRequests.html?"+parm;
+        }
+    </script>
+    
+</head>
+<body class="crm_body_bg" onload ="getUSerDetails()">
+    
+
+
+<!-- main content part here -->
+ 
+ <!-- sidebar  -->
+ <!-- sidebar part here -->
+<nav class="sidebar">
+    <div class="logo d-flex justify-content-between">
+        <a href="index.html"><img src="img/medicall.jpg" alt=""></a>
+        <div class="sidebar_close_icon d-lg-none">
+            <i class="ti-close"></i>
+        </div>
+    </div>
+    <ul id="sidebar_menu">
+       <!-- <li class="side_menu_title">
+            <span>Menu</span>
+          </li>-->
+        <li class="mm-active">
+          <a class="has-arrow"  href="#"  aria-expanded="false">
+          <!-- <i class="fas fa-th"></i> -->
+          <img src="img/menu-icon/1.svg" alt="">
+            <span>Menu</span>
+          </a>
+          <ul>
+            <li><a href="#"  onclick="goToIndex()">Dashboard</a></li>
+            <li><a href="#"  onclick="" data-toggle="modal" data-target="#myModal">Add Emergency User</a></li>
+            <li><a class="active" href="#" >Manange Users</a></li>
+          </ul>
+
+        </li>
+      </ul>
+    
+</nav>
+<!-- sidebar part end -->
+ <!--/ sidebar  -->
+
+
+<section class="main_content dashboard_part">
+        <!-- menu  -->
+    <div class="container-fluid no-gutters">
+        <div class="row">
+            <div class="col-lg-12 p-0">
+                <div class="header_iner d-flex justify-content-between align-items-center">
+                    <div class="sidebar_icon d-lg-none">
+                        <i class="ti-menu"></i>
+                    </div>
+                    <div class="serach_field-area">
+                            <div class="search_inner">
+                                <form action="#">
+                                    <div class="search_field">
+                                        <input type="text" placeholder="Search here..." >
+                                    </div>
+                                    <button type="submit"> <img src="img/icon/icon_search.svg" alt=""> </button>
+                                </form>
+                            </div>
+                        </div>
+                    <div class="header_right d-flex justify-content-between align-items-center">
+                        <div class="header_notification_warp d-flex align-items-center">
+                            <li>
+                                <a href="#"> <img src="img/icon/bell.svg" alt=""> </a>
+                            </li>
+                            <li>
+                                <a href="#"> <img src="img/icon/msg.svg" alt=""> </a>
+                            </li>
+                        </div>
+                        <div class="profile_info">
+                            <img src="img/logo.jpg" alt="#">
+                            <div class="profile_info_iner">
+                                <p id= "fullname" ></p>
+                                <h5 id="usernamHolder"></h5>
+                                <div class="profile_info_details">
+                                    <!--<a href="#" onclick="goToupdate()">My Profile <i class="ti-user"></i></a>
+                                    <a href="#">Settings <i class="ti-settings"></i></a>-->
+                                    <a href="/login.html">Log Out <i class="ti-shift-left"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--/ menu  -->
+    <div class="main_content_iner ">
+        <div class="container-fluid p-0">
+            <div class="row justify-content-center">
+                <div class="col-lg-12">
+                    <div class="single_element">
+                        <div class="quick_activity">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="quick_activity_wrap">
+                                        
+                                        <!-- Modal -->
+                                        <div id="myModal" class="modal fade" role="dialog">
+                                          <div class="modal-dialog">
+                                        
+                                            <!-- Modal content-->
+                                            <div class="modal-content">
+                                              <div class="modal-header">
+                                                  <h4 class="modal-title">Add Emergency User</h4>
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                
+                                              </div>
+                                              <div class="modal-body">
+                                                
+                                                <form>
+                                                    <div class="form-group">
+                                                        <input id="userid" type="hidden" class="form-control" placeholder="userId" >
+                                                    </div>
+                                                    <p>Institute name</p>
+                                                    <div class="form-group">
+                                                        <input id="instNAme" type="text" class="form-control" placeholder="Institute Name">
+                                                    </div>
+                                                    <p>Username</p>
+                                                    <div class="form-group">
+                                                        <input id="newUsername" type="text" class="form-control" placeholder="Login Username" >
+                                                    </div>
+                                                    <p>Password</p>
+                                                    <div class="form-group">
+                                                        <input id="newPassword" type="password" class="form-control" placeholder="Login Password">
+                                                    </div>
+                                                    
+                                                    <p>Institute Address</p>
+                                                    <div class="form-group">
+                                                        <input id="InstAddress" type="text" class="form-control" placeholder="Institute Address">
+                                                    </div>
+                                                    <p>Institute latitude</p>
+                                                    <div class="form-group">
+                                                        <input id="InstLat" type="text" class="form-control" placeholder="Institute latitude">
+                                                    </div>
+                                                    <p>Institute Longitude</p>
+                                                    <div class="form-group">
+                                                        <input id="InstLong" type="text" class="form-control" placeholder="Institute Longitude">
+                                                    </div>
+
+                                                    <p>Institute Type</p>
+                                                    <div class="form-group">
+                                                        <select id="InstType" class="form-control form-control-sm" onchange="typeChange(this.value)">
+                                                            <option value="">Select Type</option>
+                                                            <option value="USER_POLICE">Police</option>
+                                                            <option value="USER_FIRE">Fire Derpartment</option>
+                                                            <option value="USER_AMBULANCE">Ambulance</option>
+                                                            <option value="USER_DOCTOR">DOCTOR</option>
+                                                            
+                                                            <option value="USER_MEDICENTER">Medical Center</option>
+                                                        </select>
+                                                        
+                                                    </div>
+                                                    <div id="docType" style="display:none;">
+                                                        <p>Doctor Type</p>
+                                                        <div class="form-group">
+                                                            <select id="DoctorType" class="form-control form-control-sm" onchange="">
+                                                                <option value="">Select Type</option>
+                                                                <option value="DOCTOR_GP">GP</option>
+                                                                <option value="DOCTOR_DENTIST">Dentist</option>
+                                                                <option value="DOCTOR_PSYCHOLOGIST">psychologist</option>
+                                                            </select>
+                                                            
+                                                        </div>
+                                                        <p>Linked Medical Center</p>
+                                                        <div class="form-group">
+                                                            <select id="DoctorCenter" class="form-control form-control-sm" onchange="">
+                                                            </select>
+                                                            
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </form>
+                                              </div>
+                                              <div class="modal-footer">
+                                                  <button type="button" class="btn btn-success" data-dismiss="modal" onclick="createUser()" >Create User</button>
+                                                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="geocodeLatLng()">Close</button>
+                                              </div>
+                                            </div>
+                                        
+                                          </div>
+                                        </div>
+                                        <div>
+                                            <!-- Modal -->
+                                            <div id="myUpdateUSer" class="modal fade" role="dialog">
+                                              <div class="modal-dialog">
+                                            
+                                                <!-- Modal content-->
+                                                <div class="modal-content">
+                                                  <div class="modal-header">
+                                                      <h4 class="modal-title">Update Emergency User Details</h4>
+                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                    
+                                                  </div>
+                                                  <div class="modal-body">
+                                                    
+                                                    <form>
+                                                        <div class="form-group">
+                                                            <input id="userid" type="hidden" class="form-control" placeholder="userId" >
+                                                        </div>
+                                                        <p>Institute name</p>
+                                                        <div class="form-group">
+                                                            <input id="updateinstNAme" type="text" class="form-control" placeholder="Institute Name">
+                                                        </div>
+                                                        <p>Institute Address</p>
+                                                        <div class="form-group">
+                                                            <input id="updateInstAddress" type="text" class="form-control" placeholder="Institute Address">
+                                                        </div>
+                                                        <p>Institute latitude</p>
+                                                        <div class="form-group">
+                                                            <input id="updateInstLat" type="text" class="form-control" placeholder="Institute latitude">
+                                                        </div>
+                                                        <p>Institute Longitude</p>
+                                                        <div class="form-group">
+                                                            <input id="updateInstLong" type="text" class="form-control" placeholder="Institute Longitude">
+                                                        </div>
+                                                    </form>
+                                                  </div>
+                                                  <div class="modal-footer">
+                                                      <button type="button" class="btn btn-success" data-dismiss="modal" onclick="updateEmergencyDetails()" >Update User</button>
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal" onclick="">Close</button>
+                                                  </div>
+                                                </div>
+                                            
+                                              </div>
+                                        </div>
+                                        <div>    
+                                        </div>
+                                        <div class="box_right d-flex lms_block">
+                                            
+                                        </div>
+                                        <div>
+                                            <h5 id="hostingDive" class="QA_table mb_30">
+                                                    
+                                            </h5>
+                                            <div class="box_right d-flex lms_block">
+                                            <div class="serach_field_2">
+                                                <div class="search_inner">
+                                                    <form Active="#">
+                                                        <div class="search_field">
+                                                            <input id="userIdHolder" type="hidden" placeholder="user id">
+                                                            <input id="usernameHolder" type="hidden" placeholder="user id">
+                                                            <input id="usertypeHolder" type="hidden" placeholder="user id">
+                                                            
+                                                            <input id="userInstNameHolder" type="text" placeholder="user id">
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                            <div class="add_button ml-10">
+                                                <a href="#" data-toggle="modal" data-target="#addcategory" class="btn_1" onclick="updateUserStatus('user_deactiveted')">Suspend</a>
+                                            </div>
+                                            <div class="add_button ml-10">
+                                                <a href="#" data-toggle="modal" data-target="#addcategory" class="btn_1" onclick="updateUserStatus('user_active')">Activate</a>
+                                            </div>
+                                            <div class="add_button ml-10">
+                                                <a href="#" data-toggle="modal" data-target="#addcategory" class="btn_1" onclick="updateUserStatus('user_blocked')">Block</a>
+                                            </div>
+                                            <div class="add_button ml-10">
+                                                <a href="#" data-toggle="modal" data-target="#myUpdateUSer" class="btn_1" onclick="getEmergencyDetails()">Update</a>
+                                            </div>
+                                        </div>
+                                            
+                                        </div>
+                                       <!-- <a href="#" data-toggle="modal" data-target="#myModal" >
+                                        <div class="single_quick_activity d-flex">
+                                        
+                                            <div class="icon">
+                                                <img src="img/icon/medicenter.jpg" alt="">
+                                            </div>
+                                            <div class="count_content">
+                                                <h3><span class="counter">520</span> </h3>
+                                                 <p id="demo" >Medi Center</p> 
+                                            </div>
+                                        
+                                        </div>
+                                        </a> -->
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <div class="modal-body">
+        <form>
+            <div class="form-group">
+                <input id="userid" type="hidden" class="form-control" placeholder="userId" >
+            </div>
+            <div class="form-group">
+                <input id="name" type="hidden" class="form-control" placeholder="Name" >
+            </div>
+            <div class="form-group">
+                <input id="userSurname" type="hidden" class="form-control" placeholder="Lastname">
+            </div>
+            <div class="form-group">
+                <input id="userIdNumber" type="hidden" class="form-control" placeholder="ID Number/Passport">
+            </div>
+            <div class="form-group">
+                <input id="userAddress" type="hidden" class="form-control" placeholder="Home Adress">
+            </div>
+            <div class="form-group">
+                <input id="userMedicalAidName" type="hidden" class="form-control" placeholder="Medical Aid Name">
+            </div>
+            <div class="form-group">
+                <input id="MedicalAidNumber" type="hidden" class="form-control" placeholder="Medical Aid Number">
+            </div>
+            <div class="form-group">
+                <input id="MedicalAidConatct" type="hidden" class="form-control" placeholder="Medical Aid Conatct">
+            </div>
+            <div class="form-group">
+                <input id="UserCellnumber" type="hidden" class="form-control" placeholder="Medical Aid Number">
+            </div>
+            
+        </form>
+    </div>
+
+<!-- footer part -->
+<div class="footer_part">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="footer_iner text-center">
+                    <p>2020 © Influence - Designed by <a href="#"> <i class="ti-heart"></i> </a><a href="#"> Samkelo Zuma</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+<!-- main content part end -->
+
+<!-- footer  -->
+<!-- jquery slim -->
+<script src="js/jquery-3.4.1.min.js"></script>
+<!-- popper js -->
+<script src="js/popper.min.js"></script>
+<!-- bootstarp js -->
+<script src="js/bootstrap.min.js"></script>
+<!-- sidebar menu  -->
+<script src="js/metisMenu.js"></script>
+<!-- waypoints js -->
+<script src="vendors/count_up/jquery.waypoints.min.js"></script>
+<!-- waypoints js -->
+<script src="vendors/chartlist/Chart.min.js"></script>
+<!-- counterup js -->
+<script src="vendors/count_up/jquery.counterup.min.js"></script>
+<!-- swiper slider js -->
+<script src="vendors/swiper_slider/js/swiper.min.js"></script>
+<!-- nice select -->
+<script src="vendors/niceselect/js/jquery.nice-select.min.js"></script>
+<!-- owl carousel -->
+<script src="vendors/owl_carousel/js/owl.carousel.min.js"></script>
+<!-- gijgo css -->
+<script src="vendors/gijgo/gijgo.min.js"></script>
+<!-- responsive table -->
+<script src="vendors/datatable/js/jquery.dataTables.min.js"></script>
+<script src="vendors/datatable/js/dataTables.responsive.min.js"></script>
+<script src="vendors/datatable/js/dataTables.buttons.min.js"></script>
+<script src="vendors/datatable/js/buttons.flash.min.js"></script>
+<script src="vendors/datatable/js/jszip.min.js"></script>
+<script src="vendors/datatable/js/pdfmake.min.js"></script>
+<script src="vendors/datatable/js/vfs_fonts.js"></script>
+<script src="vendors/datatable/js/buttons.html5.min.js"></script>
+<script src="vendors/datatable/js/buttons.print.min.js"></script>
+
+<script src="js/chart.min.js"></script>
+<!-- progressbar js -->
+<script src="vendors/progressbar/jquery.barfiller.js"></script>
+<!-- tag input -->
+<script src="vendors/tagsinput/tagsinput.js"></script>
+<!-- text editor js -->
+<script src="vendors/text_editor/summernote-bs4.js"></script>
+
+<script src="vendors/apex_chart/apexcharts.js"></script>
+
+<!-- custom js -->
+<script src="js/custom.js"></script>
+
+<script src="vendors/apex_chart/bar_active_1.js"></script>
+<script src="vendors/apex_chart/apex_chart_list.js"></script>
+<script src="dist/attention.js"></script>
+</body>
+
+<!-- Mirrored from demo.dashboardpack.com/hospital-html/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 20 Apr 2021 10:56:19 GMT -->
+</html>
